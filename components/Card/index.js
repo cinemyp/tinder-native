@@ -9,10 +9,9 @@ export const Card = ({ pic, title, caption }) => {
   return (
     <Tile
       imageSrc={{
-        uri: "https://vectorified.com/images/make-icon-font-25.png",
+        uri: pic,
       }}
-      imageContainerStyle={styles.container}
-      imageProps={{ resizeMode: "cover", borderRadius: 20, height: "100%" }}
+      imageContainerStyle={styles.imageContainer}
       title={title}
       titleStyle={styles.title}
       caption={caption}
@@ -34,15 +33,23 @@ const styles = StyleSheet.create({
     height: Layout.window.height - BOTTOM_BAR_HEIGHT * 6,
     borderRadius: 20,
     overflow: "hidden", // this does magic
+    shadowOffset: { width: 0, height: 5 },
+    shadowColor: "#000",
+    shadowOpacity: 0.8,
+    shadowRadius: 10,
+    borderWidth: 1,
+    borderColor: "white",
   },
   title: {
     position: "absolute",
     left: 10,
     bottom: 30,
+    fontSize: 34,
   },
   caption: {
     position: "absolute",
     left: 10,
     bottom: 10,
+    fontSize: 20,
   },
 });
