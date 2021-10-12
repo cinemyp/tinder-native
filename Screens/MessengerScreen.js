@@ -3,9 +3,9 @@ import React from "react";
 import { ScrollView, StyleSheet, Text } from "react-native";
 import { Avatar, ListItem } from "react-native-elements";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { Dialog } from "../components/Dialog";
+import { Dialog } from "../components/Dialog/Dialog";
 
-export default function MessengerScreen() {
+export default function MessengerScreen({ navigation }) {
   const messages = [
     {
       id: 0,
@@ -37,14 +37,34 @@ export default function MessengerScreen() {
     },
   ];
 
+  const handlePressDialog = () => {
+    //TODO: передать данные в Store
+    navigation.navigate("Dialog");
+  };
+
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView style={{ height: "100%" }}>
+      <ScrollView style={styles.fullHeight}>
         {messages.map(({ id, avatar, name, message }) => (
-          <Dialog key={id} avatar={avatar} name={name} message={message} />
+          <Dialog
+            key={id}
+            avatar={avatar}
+            name={name}
+            message={message}
+            onPress={handlePressDialog}
+          />
         ))}
       </ScrollView>
       <StatusBar style="auto" />
     </SafeAreaView>
   );
 }
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "transparent",
+  },
+  fullHeight: {
+    height: "100%",
+  },
+});
