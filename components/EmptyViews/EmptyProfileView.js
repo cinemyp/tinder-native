@@ -1,7 +1,7 @@
 import React from "react";
 import { Button, StyleSheet, Text, View } from "react-native";
 
-export const EmptyView = ({ titleReload, onReload }) => {
+export const EmptyProfileView = ({ titleReload, onReload }) => {
   return (
     <View style={styles.container}>
       <Text style={styles.emptyText}>There are no new profiles</Text>

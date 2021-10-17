@@ -4,7 +4,10 @@ import { StyleSheet, Text } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Swiper from "react-native-deck-swiper";
 import { Card } from "../components/Card";
-import { EmptyView } from "../components/EmptyView";
+import {
+  EmptyProfileView,
+  EmptyView,
+} from "../components/EmptyViews/EmptyProfileView";
 
 export default function HomeScreen() {
   const [viewProfiles, setViewProfiles] = useState(false);
@@ -72,7 +75,7 @@ export default function HomeScreen() {
           disableTopSwipe={true}
         />
       ) : (
-        <EmptyView titleReload={"Reload"} onReload={handleReload} />
+        <EmptyProfileView titleReload={"Reload"} onReload={handleReload} />
       )}
 
       <StatusBar style="auto" />
