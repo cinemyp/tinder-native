@@ -3,11 +3,11 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import HomeScreen from "../screens/HomeScreen";
 import ProfileScreen from "../screens/ProfileScreen";
-import MessageStackNavigator from "./MessageStackNavigator";
+import MessengerScreen from "../screens/MessengerScreen";
 
 const Tab = createBottomTabNavigator();
 
-export default TabNavigator = () => {
+export default HomeTabs = () => {
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
@@ -18,7 +18,7 @@ export default TabNavigator = () => {
             case "Home":
               iconName = focused ? "heart" : "heart-outline";
               break;
-            case "MessengerStack":
+            case "Messenger":
               iconName = focused ? "chatbubbles" : "chatbubbles-outline";
               break;
             case "Profile":
@@ -29,13 +29,14 @@ export default TabNavigator = () => {
         },
         tabBarActiveTintColor: "#fcb9b8",
         tabBarShowLabel: false,
+
         headerShown: false,
       })}
     >
       <Tab.Screen name="Home" component={HomeScreen} />
       <Tab.Screen
-        name="MessengerStack"
-        component={MessageStackNavigator}
+        name={"Messenger"}
+        component={MessengerScreen}
         options={{ headerShown: false }}
       />
       <Tab.Screen name="Profile" component={ProfileScreen} />

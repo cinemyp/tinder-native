@@ -1,7 +1,7 @@
 import { createStackNavigator } from "@react-navigation/stack";
 import React from "react";
 import DialogScreen from "../screens/DialogScreen";
-import MessengerScreen from "../screens/MessengerScreen";
+import HomeTabs from "./HomeTabs";
 
 const Stack = createStackNavigator();
 
@@ -12,8 +12,8 @@ export default MessageStackNavigator = () => {
   return (
     <Stack.Navigator>
       <Stack.Screen
-        name={"Messenger"}
-        component={MessengerScreen}
+        name={"HomeTabs"}
+        component={HomeTabs}
         options={{ headerShown: false }}
       />
       <Stack.Screen
