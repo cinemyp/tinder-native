@@ -1,29 +1,44 @@
-import React from "react";
-import { StyleSheet, Text, View } from "react-native";
-import { Input, ListItem } from "react-native-elements";
-import { FlatList } from "react-native-gesture-handler";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { Message } from "../components/Dialog/Message";
+import React, { useCallback, useEffect, useState } from "react";
+import { StyleSheet } from "react-native";
+import { Bubble, GiftedChat } from "react-native-gifted-chat";
+import { EmptyChatView } from "../components/EmptyViews/EmptyChatView";
 
 export default DialogScreen = () => {
-  const messages = [
-    { id: "0", name: "Alex", message: "123", own: false, dateTime: "" },
-    { id: "1", name: "Alex", message: "Hello", own: false, dateTime: "" },
-    { id: "2", name: "Alex", message: "Good", own: true, dateTime: "" },
-    { id: "3", name: "Alex", message: "123", own: false, dateTime: "" },
-  ];
+  const [messages, setMessages] = useState([]);
+
+  useEffect(() => {
+    setMessages([]);
+  }, []);
+
+  const onSend = useCallback((messages = []) => {
+    setMessages((previousMessages) =>
+      GiftedChat.append(previousMessages, messages)
+    );
+  }, []);
 
   return (
-    <View style={styles.container}>
-      <FlatList
-        data={messages}
-        renderItem={({ item }) => <Message key={item.id} {...item} />}
-      />
-      <Input
-        placeholder={"Type your message here..."}
-        containerStyle={styles.input}
-      />
-    </View>
+    <GiftedChat
+      messages={messages}
+      onSend={(messages) => onSend(messages)}
+      user={{
+        _id: 1,
+      }}
+      messagesContainerStyle={styles.messagesContainer}
+      renderBubble={(props) => {
+        return (
+          <Bubble
+            {...props}
+            wrapperStyle={{
+              right: { backgroundColor: "#fcb9b8" },
+              left: { backgroundColor: "#eee" },
+            }}
+          />
+        );
+      }}
+      renderChatEmpty={EmptyChatView}
+      inverted={false}
+      alwaysShowSend
+    />
   );
 };
 const styles = StyleSheet.create({
@@ -36,5 +51,7 @@ const styles = StyleSheet.create({
   fullHeight: {
     height: "100%",
   },
-  input: {},
+  messagesContainer: {
+    backgroundColor: "#fff",
+  },
 });
