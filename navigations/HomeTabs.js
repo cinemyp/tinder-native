@@ -2,7 +2,7 @@ import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import HomeScreen from "../screens/HomeScreen";
-import ProfileScreen from "../screens/ProfileScreen";
+import MyProfileScreen from "../screens/MyProfileScreen";
 import MessengerScreen from "../screens/MessengerScreen";
 
 const Tab = createBottomTabNavigator();
@@ -21,7 +21,7 @@ export default HomeTabs = () => {
             case "Messenger":
               iconName = focused ? "chatbubbles" : "chatbubbles-outline";
               break;
-            case "Profile":
+            case "MyProfile":
               iconName = focused ? "person" : "person-outline";
               break;
           }
@@ -39,7 +39,7 @@ export default HomeTabs = () => {
         component={MessengerScreen}
         options={{ headerShown: false }}
       />
-      <Tab.Screen name="Profile" component={ProfileScreen} />
+      <Tab.Screen name="MyProfile" component={MyProfileScreen} />
     </Tab.Navigator>
   );
 };

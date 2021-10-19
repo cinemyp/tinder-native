@@ -41,6 +41,10 @@ export default function MessengerScreen({ navigation }) {
     //TODO: передать данные в Store
     navigation.navigate("Dialog");
   };
+  const handlePressAvatarDialog = () => {
+    //TODO: передать данные в Store
+    navigation.navigate("Profile");
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -51,7 +55,8 @@ export default function MessengerScreen({ navigation }) {
             avatar={avatar}
             name={name}
             message={message}
-            onPress={handlePressDialog}
+            onPressDialog={handlePressDialog}
+            onPressAvatarDialog={handlePressAvatarDialog}
           />
         ))}
       </ScrollView>
@@ -62,7 +67,7 @@ export default function MessengerScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "transparent",
+    backgroundColor: "#fff",
   },
   fullHeight: {
     height: "100%",
