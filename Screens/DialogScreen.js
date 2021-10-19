@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { StyleSheet } from "react-native";
+import { StyleSheet, View } from "react-native";
 import { Bubble, GiftedChat } from "react-native-gifted-chat";
+import { getBottomSpace } from "react-native-iphone-x-helper";
 import { EmptyChatView } from "../components/EmptyViews/EmptyChatView";
 
 export default DialogScreen = () => {
@@ -36,21 +37,13 @@ export default DialogScreen = () => {
         );
       }}
       renderChatEmpty={EmptyChatView}
-      inverted={false}
+      inverted={true}
       alwaysShowSend
+      bottomOffset={getBottomSpace()}
     />
   );
 };
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "white",
-    paddingLeft: 10,
-    paddingRight: 10,
-  },
-  fullHeight: {
-    height: "100%",
-  },
   messagesContainer: {
     backgroundColor: "#fff",
   },

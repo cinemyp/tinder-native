@@ -12,6 +12,7 @@ export const EmptyChatView = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    transform: [{ scaleY: -1 }],
     alignItems: "center",
     justifyContent: "center",
   },

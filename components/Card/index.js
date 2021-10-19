@@ -5,7 +5,7 @@ import Layout from "../../constants/Layout";
 
 const BOTTOM_BAR_HEIGHT = !Platform.isPad ? 29 : 49;
 
-export const Card = ({ pic, title, caption }) => {
+export const Card = ({ pic, title, caption, onPressCard }) => {
   return (
     <Tile
       imageSrc={{
@@ -19,6 +19,7 @@ export const Card = ({ pic, title, caption }) => {
       activeOpacity={0.9}
       containerStyle={styles.container}
       featured
+      onPress={onPressCard}
     />
   );
 };
