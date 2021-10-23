@@ -7,18 +7,19 @@ import {
   View,
 } from 'react-native';
 import { Button, Text } from 'react-native-elements';
-import { auth } from '../firebase';
+import { auth, firestore } from '../firebase';
 
 export const RegisterScreen = () => {
   const [email, setEmail] = useState('');
+  const [name, setName] = useState('');
   const [password, setPassword] = useState('');
 
   const handlePressRegister = () => {
     auth
       .createUserWithEmailAndPassword(email, password)
       .then((userCredentials) => {
-        const user = userCredentials.user;
-        console.log(user.email);
+        const { uid } = auth.currentUser;
+        firestore.collection('users').doc(uid).set({ name, email });
       })
       .catch((error) => alert(error.message));
   };
@@ -31,9 +32,26 @@ export const RegisterScreen = () => {
           style={styles['input']}
           value={email}
           onChangeText={(text) => setEmail(text)}
+          onSubmitEditing={() => this.nameInput.focus()}
+          keyboardType={'email-address'}
+          autoCompleteType={'email'}
+          autoCapitalize={'none'}
+          autoCorrect={false}
+          returnKeyType={'next'}
+        />
+        <TextInput
+          placeholder={'Name'}
+          ref={(input) => (this.nameInput = input)}
+          style={styles['input']}
+          value={name}
+          onChangeText={(text) => setName(text)}
+          onSubmitEditing={() => this.passwordInput.focus()}
+          autoCorrect={false}
+          returnKeyType={'next'}
         />
         <TextInput
           placeholder={'Password'}
+          ref={(input) => (this.passwordInput = input)}
           style={styles['input']}
           value={password}
           onChangeText={(text) => setPassword(text)}
