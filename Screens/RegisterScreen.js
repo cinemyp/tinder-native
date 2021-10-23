@@ -7,10 +7,21 @@ import {
   View,
 } from 'react-native';
 import { Button, Text } from 'react-native-elements';
+import { auth } from '../firebase';
 
 export const RegisterScreen = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+
+  const handlePressRegister = () => {
+    auth
+      .createUserWithEmailAndPassword(email, password)
+      .then((userCredentials) => {
+        const user = userCredentials.user;
+        console.log(user.email);
+      })
+      .catch((error) => alert(error.message));
+  };
 
   return (
     <KeyboardAvoidingView style={styles['container']} behavior={'padding'}>
@@ -30,7 +41,11 @@ export const RegisterScreen = () => {
         />
       </View>
       <View style={styles['buttonContainer']}>
-        <Button title={'Register'} buttonStyle={styles['button']} />
+        <Button
+          title={'Register'}
+          buttonStyle={styles['button']}
+          onPress={handlePressRegister}
+        />
       </View>
     </KeyboardAvoidingView>
   );

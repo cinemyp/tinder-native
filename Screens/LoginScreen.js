@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   KeyboardAvoidingView,
   StyleSheet,
@@ -7,6 +7,7 @@ import {
   View,
 } from 'react-native';
 import { Button, Text } from 'react-native-elements';
+import { auth } from '../firebase';
 
 export const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState('');
@@ -15,6 +16,26 @@ export const LoginScreen = ({ navigation }) => {
   const handlePressRegisterLink = () => {
     navigation.navigate('Register');
   };
+
+  const handlePressLogin = () => {
+    auth
+      .signInWithEmailAndPassword(email, password)
+      .then((userCredentials) => {
+        const user = userCredentials.user;
+        console.log(user.email);
+      })
+      .catch((error) => console.log(error.message));
+  };
+
+  useEffect((user) => {
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      if (user) {
+        navigation.navigate('HomeTabs');
+      }
+    });
+
+    return unsubscribe;
+  }, []);
 
   return (
     <KeyboardAvoidingView style={styles['container']} behavior={'padding'}>
@@ -34,7 +55,11 @@ export const LoginScreen = ({ navigation }) => {
         />
       </View>
       <View style={styles['buttonContainer']}>
-        <Button title={'Login'} buttonStyle={styles['button']} />
+        <Button
+          title={'Login'}
+          buttonStyle={styles['button']}
+          onPress={handlePressLogin}
+        />
         <Text style={styles['registerText']}>You don't have an account?</Text>
         <Button
           title={'Register'}
