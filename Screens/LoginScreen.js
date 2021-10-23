@@ -30,7 +30,7 @@ export const LoginScreen = ({ navigation }) => {
   useEffect((user) => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
       if (user) {
-        navigation.navigate('HomeTabs');
+        navigation.replace('HomeTabs');
       }
     });
 
@@ -45,12 +45,22 @@ export const LoginScreen = ({ navigation }) => {
           style={styles['input']}
           value={email}
           onChangeText={(text) => setEmail(text)}
+          onSubmitEditing={() => this.passwordInput.focus()}
+          keyboardType={'email-address'}
+          autoCompleteType={'email'}
+          autoCapitalize={'none'}
+          autoCorrect={false}
+          returnKeyType={'next'}
         />
         <TextInput
           placeholder={'Password'}
+          ref={(input) => (this.passwordInput = input)}
           style={styles['input']}
           value={password}
           onChangeText={(text) => setPassword(text)}
+          keyboardType={'visible-password'}
+          autoCompleteType={'password'}
+          returnKeyType={'go'}
           secureTextEntry
         />
       </View>
