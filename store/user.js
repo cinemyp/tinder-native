@@ -1,4 +1,4 @@
-import { firestore } from '../firebase';
+import { auth, firestore } from '../firebase';
 
 export const user = (store) => {
   store.on('@init', () => ({ currentUser: {} }));
@@ -14,6 +14,7 @@ export const user = (store) => {
         if (snapshot.exists) {
           const data = snapshot.data();
           store.dispatch('user/save', { ...data });
+          console.log('store', data);
         } else {
           console.log("doesn't exist");
           store.dispatch('user/save', { ...currentUser, status: false });

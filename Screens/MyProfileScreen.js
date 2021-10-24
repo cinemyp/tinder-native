@@ -1,25 +1,29 @@
+import React, { useEffect } from 'react';
+import { auth } from '../firebase';
+import { useStoreon } from 'storeon/react';
 import { StatusBar } from 'expo-status-bar';
-import React from 'react';
 import { Image, StyleSheet, View } from 'react-native';
 import { Text, Button } from 'react-native-elements';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import Layout from '../constants/Layout';
-import { auth } from '../firebase';
 
 export default function MyProfileScreen({
-  name = 'Lucy',
   age = 25,
   onPressSettings,
   onPressEdit,
   navigation,
 }) {
+  const { dispatch, currentUser } = useStoreon('currentUser');
+  const { name } = currentUser;
   const handlePressLogout = () => {
     auth
       .signOut()
       .then(() => {})
       .catch((error) => alert(error.message));
   };
+
+  useEffect(() => {}, []);
 
   return (
     <SafeAreaView style={styles.container}>

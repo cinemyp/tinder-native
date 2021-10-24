@@ -4,11 +4,16 @@ import MessageStackNavigator from './navigations/MessageStackNavigator';
 import { auth } from './firebase';
 import { Text, View } from 'react-native';
 import LoginRegStackNavigator from './navigations/LoginRegStackNavigator';
+import { createStoreon } from 'storeon';
+import { storeonParams } from './store';
+import { StoreContext } from 'storeon/react';
+
+const store = createStoreon(storeonParams);
 
 export default function App() {
   const [state, setState] = useState({ loaded: false });
   useEffect(() => {
-    auth.onAuthStateChanged((user) => {
+    const unsubscribe = auth.onAuthStateChanged((user) => {
       if (!user) {
         setState((prevState) => ({
           ...prevState,
@@ -23,6 +28,8 @@ export default function App() {
         }));
       }
     });
+
+    return unsubscribe;
   }, []);
 
   if (!state.loaded) {
@@ -34,14 +41,18 @@ export default function App() {
   }
   if (!state.loggedIn) {
     return (
-      <NavigationContainer>
-        <LoginRegStackNavigator />
-      </NavigationContainer>
+      <StoreContext.Provider value={store}>
+        <NavigationContainer>
+          <LoginRegStackNavigator />
+        </NavigationContainer>
+      </StoreContext.Provider>
     );
   }
   return (
-    <NavigationContainer>
-      <MessageStackNavigator />
-    </NavigationContainer>
+    <StoreContext.Provider value={store}>
+      <NavigationContainer>
+        <MessageStackNavigator />
+      </NavigationContainer>
+    </StoreContext.Provider>
   );
 }

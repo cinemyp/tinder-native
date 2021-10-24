@@ -7,11 +7,14 @@ import {
   View,
 } from 'react-native';
 import { Button, Text } from 'react-native-elements';
+import { useStoreon } from 'storeon/react';
 import { auth } from '../firebase';
 
 export const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+
+  const { dispatch } = useStoreon('user');
 
   const handlePressRegisterLink = () => {
     navigation.navigate('Register');
@@ -22,7 +25,8 @@ export const LoginScreen = ({ navigation }) => {
       .signInWithEmailAndPassword(email, password)
       .then((userCredentials) => {
         const user = userCredentials.user;
-        console.log(user.email);
+        //запрашиваем данные о пользователе и сохраняем в сторе
+        dispatch('user/get');
       })
       .catch((error) => console.log(error.message));
   };
