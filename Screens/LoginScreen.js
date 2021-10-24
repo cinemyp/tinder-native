@@ -27,15 +27,15 @@ export const LoginScreen = ({ navigation }) => {
       .catch((error) => console.log(error.message));
   };
 
-  useEffect((user) => {
-    const unsubscribe = auth.onAuthStateChanged((user) => {
-      if (user) {
-        navigation.replace('HomeTabs');
-      }
-    });
+  // useEffect((user) => {
+  //   const unsubscribe = auth.onAuthStateChanged((user) => {
+  //     if (user) {
+  //       navigation.replace('HomeTabs');
+  //     }
+  //   });
 
-    return unsubscribe;
-  }, []);
+  //   return unsubscribe;
+  // }, []);
 
   return (
     <KeyboardAvoidingView style={styles['container']} behavior={'padding'}>

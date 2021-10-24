@@ -17,12 +17,6 @@ export default MessageStackNavigator = () => {
   return (
     <Stack.Navigator>
       <Stack.Screen
-        name={'Login'}
-        component={LoginScreen}
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen name={'Register'} component={RegisterScreen} />
-      <Stack.Screen
         name={'HomeTabs'}
         component={HomeTabs}
         options={{ headerShown: false }}

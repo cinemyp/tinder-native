@@ -17,7 +17,7 @@ export default function MyProfileScreen({
   const handlePressLogout = () => {
     auth
       .signOut()
-      .then(navigation.replace('Login'))
+      .then(() => {})
       .catch((error) => alert(error.message));
   };
 
