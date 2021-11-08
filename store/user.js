@@ -1,4 +1,4 @@
-import { auth, firestore } from '../firebase';
+import { auth, firestore, firebase } from '../firebase';
 
 export const user = (store) => {
   store.on('@init', () => ({ currentUser: {} }));
@@ -13,12 +13,36 @@ export const user = (store) => {
       .then((snapshot) => {
         if (snapshot.exists) {
           const data = snapshot.data();
-          store.dispatch('user/save', { ...data });
-          console.log('store', data);
+          const result = { id: auth.currentUser.uid, ...data };
+          store.dispatch('user/save', { ...result });
+          return result;
         } else {
           console.log("doesn't exist");
           store.dispatch('user/save', { ...currentUser, status: false });
         }
-      });
+      })
+      .then((data) =>
+        getAvatarImage(data.id, data.avatarId).then((snapshot) => {
+          if (snapshot.exists) {
+            const { downloadURL } = snapshot.data();
+
+            store.dispatch('user/save', {
+              ...data,
+              avatarUrl: downloadURL,
+            });
+          } else {
+            console.log('Image has not been found. ID is ', data.avatarId);
+            store.dispatch('user/save', { ...data, status: false });
+          }
+        })
+      );
   });
+};
+const getAvatarImage = (userId, avatarId) => {
+  return firestore
+    .collection('images')
+    .doc(userId)
+    .collection('userImages')
+    .doc(avatarId)
+    .get();
 };

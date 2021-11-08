@@ -25,7 +25,7 @@ export default function MyProfileScreen({
   };
 
   useEffect(() => {
-    console.log(currentUser);
+    dispatch('user/get');
   }, []);
 
   return (
@@ -34,7 +34,7 @@ export default function MyProfileScreen({
         <Image
           style={styles.avatar}
           source={{
-            uri: 'https://images.pexels.com/photos/774909/pexels-photo-774909.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260',
+            uri: currentUser.avatarUrl,
           }}
         />
       </View>

@@ -114,10 +114,17 @@ export const RegisterScreen = () => {
   const saveProfileData = (data) => {
     const { uid } = auth.currentUser;
     //TODO: заменить на апи метод
-    firestore.collection('images').doc(uid).collection('userImages').add({
-      downloadURL: data,
-      uploaded: firebase.firestore.FieldValue.serverTimestamp(),
-    });
+    firestore
+      .collection('images')
+      .doc(uid)
+      .collection('userImages')
+      .add({
+        downloadURL: data,
+        uploaded: firebase.firestore.FieldValue.serverTimestamp(),
+      })
+      .then((docRef) => {
+        firestore.collection('users').doc(uid).update({ avatarId: docRef.id });
+      });
   };
 
   return (
