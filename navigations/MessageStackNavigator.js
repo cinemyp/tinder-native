@@ -1,26 +1,28 @@
-import { createStackNavigator } from "@react-navigation/stack";
-import React from "react";
-import DialogScreen from "../screens/DialogScreen";
-import { ProfileScreen } from "../screens/ProfileScreen";
-import HomeTabs from "./HomeTabs";
+import { createStackNavigator } from '@react-navigation/stack';
+import React from 'react';
+import DialogScreen from '../screens/DialogScreen';
+import { LoginScreen } from '../screens/LoginScreen';
+import { ProfileScreen } from '../screens/ProfileScreen';
+import { RegisterScreen } from '../screens/RegisterScreen';
+import HomeTabs from './HomeTabs';
 
 const Stack = createStackNavigator();
 
 export default MessageStackNavigator = () => {
   //TODO: получаем из стора данные о диалоге
-  const name = "Amelia";
+  const name = 'Amelia';
 
-  const BACK_TITLE = "Messages";
+  const BACK_TITLE = 'Messages';
 
   return (
     <Stack.Navigator>
       <Stack.Screen
-        name={"HomeTabs"}
+        name={'HomeTabs'}
         component={HomeTabs}
         options={{ headerShown: false }}
       />
       <Stack.Screen
-        name={"Dialog"}
+        name={'Dialog'}
         component={DialogScreen}
         options={{
           headerTitle: name,
@@ -29,7 +31,7 @@ export default MessageStackNavigator = () => {
         }}
       />
       <Stack.Screen
-        name={"Profile"}
+        name={'Profile'}
         component={ProfileScreen}
         options={{ headerShown: true, headerBackTitle: BACK_TITLE }}
       />
