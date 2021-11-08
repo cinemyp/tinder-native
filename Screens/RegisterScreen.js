@@ -7,14 +7,66 @@ import {
   View,
 } from 'react-native';
 import { Button, Text } from 'react-native-elements';
+import { RegistrationStepOne } from '../components/Registration/RegistrationStepOne';
+import { RegistrationStepTwo } from '../components/Registration/RegistrationStepTwo';
 import { auth, firestore } from '../firebase';
 
+const defaultState = {
+  email: '',
+  password: '',
+  name: '',
+};
+
 export const RegisterScreen = () => {
-  const [email, setEmail] = useState('');
-  const [name, setName] = useState('');
-  const [password, setPassword] = useState('');
+  const [state, setState] = useState(defaultState);
+  const [step, setStep] = useState(0);
+
+  const maxSteps = 2;
+
+  const nextStep = () => {
+    switch (step) {
+      case 0:
+        if (!state.email || !state.password || !state.name) {
+          //TODO: вернуть ошибку, напистаь, что нужно заполнить все поля
+          //TODO: проверка полей
+          return;
+        }
+        break;
+      case 1:
+        handlePressRegister();
+        return;
+      default:
+        return;
+    }
+
+    setStep((prevStep) => prevStep + 1);
+  };
+
+  const steps = [
+    {
+      component: (
+        <RegistrationStepOne
+          setState={setState}
+          next={nextStep}
+          values={state}
+          styles={styles}
+        />
+      ),
+    },
+    {
+      component: (
+        <RegistrationStepTwo
+          setState={setState}
+          next={nextStep}
+          values={state}
+          styles={styles}
+        />
+      ),
+    },
+  ];
 
   const handlePressRegister = () => {
+    const { email, password, name } = state;
     auth
       .createUserWithEmailAndPassword(email, password)
       .then((userCredentials) => {
@@ -26,45 +78,7 @@ export const RegisterScreen = () => {
 
   return (
     <KeyboardAvoidingView style={styles['container']} behavior={'padding'}>
-      <View style={styles['inputContainer']}>
-        <TextInput
-          placeholder={'Email'}
-          style={styles['input']}
-          value={email}
-          onChangeText={(text) => setEmail(text)}
-          onSubmitEditing={() => this.nameInput.focus()}
-          keyboardType={'email-address'}
-          autoCompleteType={'email'}
-          autoCapitalize={'none'}
-          autoCorrect={false}
-          returnKeyType={'next'}
-        />
-        <TextInput
-          placeholder={'Name'}
-          ref={(input) => (this.nameInput = input)}
-          style={styles['input']}
-          value={name}
-          onChangeText={(text) => setName(text)}
-          onSubmitEditing={() => this.passwordInput.focus()}
-          autoCorrect={false}
-          returnKeyType={'next'}
-        />
-        <TextInput
-          placeholder={'Password'}
-          ref={(input) => (this.passwordInput = input)}
-          style={styles['input']}
-          value={password}
-          onChangeText={(text) => setPassword(text)}
-          secureTextEntry
-        />
-      </View>
-      <View style={styles['buttonContainer']}>
-        <Button
-          title={'Register'}
-          buttonStyle={styles['button']}
-          onPress={handlePressRegister}
-        />
-      </View>
+      {steps[step].component}
     </KeyboardAvoidingView>
   );
 };
@@ -100,5 +114,29 @@ const styles = StyleSheet.create({
   },
   registerLink: {
     fontSize: 14,
+  },
+  thumbnail: {
+    width: 250,
+    height: 350,
+    resizeMode: 'cover',
+    borderRadius: 5,
+    zIndex: 0,
+  },
+  imageContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: 252,
+    height: 352,
+    backgroundColor: '#ccc',
+    borderColor: '#aaa',
+    borderWidth: 2,
+    borderRadius: 5,
+    position: 'relative',
+  },
+  removeBtn: {
+    position: 'absolute',
+    zIndex: 99,
+    right: -20,
+    top: -20,
   },
 });
