@@ -17,13 +17,16 @@ export default function MyProfileScreen({
   const { dispatch, currentUser } = useStoreon('currentUser');
   const { name } = currentUser;
   const handlePressLogout = () => {
+    //TODO: заменить на апи метод
     auth
       .signOut()
       .then(() => {})
       .catch((error) => alert(error.message));
   };
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    console.log(currentUser);
+  }, []);
 
   return (
     <SafeAreaView style={styles.container}>

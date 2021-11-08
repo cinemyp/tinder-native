@@ -27,10 +27,12 @@ export const RegistrationStepTwo = ({ setState, next, values, styles }) => {
       return;
     }
     setSelectedImage({ localUri: pickerResult.uri });
+    setState((prevState) => ({ ...prevState, imageUri: pickerResult.uri }));
   };
 
   const handlePressRemoveSelectedImage = () => {
     setSelectedImage(null);
+    setState((prevState) => ({ ...prevState, imageUri: '' }));
   };
 
   return (
