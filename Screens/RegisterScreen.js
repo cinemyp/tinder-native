@@ -1,13 +1,7 @@
 import React, { useState } from 'react';
-import {
-  KeyboardAvoidingView,
-  StyleSheet,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from 'react-native';
-import { Button, Text } from 'react-native-elements';
+import { Alert, KeyboardAvoidingView, StyleSheet } from 'react-native';
 import { RegistrationStepOne } from '../components/Registration/RegistrationStepOne';
+import { RegistrationStepThree } from '../components/Registration/RegistrationStepThree';
 import { RegistrationStepTwo } from '../components/Registration/RegistrationStepTwo';
 import { auth, firestore, firebase } from '../firebase';
 
@@ -16,24 +10,28 @@ const defaultState = {
   password: '',
   name: '',
   imageUri: '',
+  date: new Date(),
 };
 
 export const RegisterScreen = () => {
   const [state, setState] = useState(defaultState);
-  const [step, setStep] = useState(0);
+  const [step, setStep] = useState(1);
 
-  const maxSteps = 2;
+  const maxSteps = 3;
 
   const nextStep = () => {
     switch (step) {
       case 0:
         if (!state.email || !state.password || !state.name) {
-          //TODO: вернуть ошибку, напистаь, что нужно заполнить все поля
           //TODO: проверка полей
+          Alert.alert('Error during registration', 'Fill in all the fields');
           return;
         }
         break;
       case 1:
+        //TODO: проверка на совершеннолетие
+        break;
+      case 2:
         if (!state.imageUri) {
           return;
         }
@@ -67,16 +65,29 @@ export const RegisterScreen = () => {
         />
       ),
     },
+    {
+      component: (
+        <RegistrationStepThree
+          setState={setState}
+          next={nextStep}
+          values={state}
+          styles={styles}
+        />
+      ),
+    },
   ];
 
   const handlePressRegister = () => {
-    const { email, password, name } = state;
+    const { email, password, name, date } = state;
 
     auth
       .createUserWithEmailAndPassword(email, password)
       .then((userCredentials) => {
         const { uid } = auth.currentUser;
-        firestore.collection('users').doc(uid).set({ name, email });
+        firestore
+          .collection('users')
+          .doc(uid)
+          .set({ name, email, birthdayDate: date });
       })
       .then(() => fetch(state.imageUri))
       .then((response) => response.blob())
@@ -143,6 +154,9 @@ const styles = StyleSheet.create({
   inputContainer: {
     width: '80%',
   },
+  dateContainer: {
+    width: '100%',
+  },
   input: {
     backgroundColor: '#fff',
     paddingHorizontal: 15,
@@ -189,5 +203,9 @@ const styles = StyleSheet.create({
     zIndex: 99,
     right: -20,
     top: -20,
+  },
+  addPhotoBtn: {
+    position: 'absolute',
+    zIndex: 99,
   },
 });

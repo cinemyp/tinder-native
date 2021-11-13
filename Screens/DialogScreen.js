@@ -1,8 +1,9 @@
-import React, { useCallback, useEffect, useState } from "react";
-import { StyleSheet, View } from "react-native";
-import { Bubble, GiftedChat } from "react-native-gifted-chat";
-import { getBottomSpace } from "react-native-iphone-x-helper";
-import { EmptyChatView } from "../components/EmptyViews/EmptyChatView";
+import React, { useCallback, useEffect, useState } from 'react';
+import { StyleSheet, View } from 'react-native';
+import { Bubble, GiftedChat } from 'react-native-gifted-chat';
+import { getBottomSpace } from 'react-native-iphone-x-helper';
+import { EmptyChatView } from '../components/EmptyViews/EmptyChatView';
+import { PRIMARY_COLOR } from '../constants/colors';
 
 export default DialogScreen = () => {
   const [messages, setMessages] = useState([]);
@@ -30,8 +31,8 @@ export default DialogScreen = () => {
           <Bubble
             {...props}
             wrapperStyle={{
-              right: { backgroundColor: "#fcb9b8" },
-              left: { backgroundColor: "#eee" },
+              right: { backgroundColor: PRIMARY_COLOR },
+              left: { backgroundColor: '#eee' },
             }}
           />
         );
@@ -45,6 +46,6 @@ export default DialogScreen = () => {
 };
 const styles = StyleSheet.create({
   messagesContainer: {
-    backgroundColor: "#fff",
+    backgroundColor: '#fff',
   },
 });

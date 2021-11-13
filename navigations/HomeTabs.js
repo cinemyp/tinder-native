@@ -1,9 +1,10 @@
-import React from "react";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import Ionicons from "@expo/vector-icons/Ionicons";
-import HomeScreen from "../screens/HomeScreen";
-import MyProfileScreen from "../screens/MyProfileScreen";
-import MessengerScreen from "../screens/MessengerScreen";
+import React from 'react';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import Ionicons from '@expo/vector-icons/Ionicons';
+import HomeScreen from '../screens/HomeScreen';
+import MyProfileScreen from '../screens/MyProfileScreen';
+import MessengerScreen from '../screens/MessengerScreen';
+import { PRIMARY_COLOR } from '../constants/colors';
 
 const Tab = createBottomTabNavigator();
 
@@ -15,19 +16,19 @@ export default HomeTabs = () => {
           let iconName;
 
           switch (route.name) {
-            case "Home":
-              iconName = focused ? "heart" : "heart-outline";
+            case 'Home':
+              iconName = focused ? 'heart' : 'heart-outline';
               break;
-            case "Messenger":
-              iconName = focused ? "chatbubbles" : "chatbubbles-outline";
+            case 'Messenger':
+              iconName = focused ? 'chatbubbles' : 'chatbubbles-outline';
               break;
-            case "MyProfile":
-              iconName = focused ? "person" : "person-outline";
+            case 'MyProfile':
+              iconName = focused ? 'person' : 'person-outline';
               break;
           }
           return <Ionicons name={iconName} size={size} color={color} />;
         },
-        tabBarActiveTintColor: "#fcb9b8",
+        tabBarActiveTintColor: PRIMARY_COLOR,
         tabBarShowLabel: false,
 
         headerShown: false,
@@ -35,7 +36,7 @@ export default HomeTabs = () => {
     >
       <Tab.Screen name="Home" component={HomeScreen} />
       <Tab.Screen
-        name={"Messenger"}
+        name={'Messenger'}
         component={MessengerScreen}
         options={{ headerShown: false }}
       />

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import {
+  Alert,
   KeyboardAvoidingView,
   StyleSheet,
   TextInput,
@@ -28,7 +29,13 @@ export const LoginScreen = ({ navigation }) => {
         //запрашиваем данные о пользователе и сохраняем в сторе
         dispatch('user/get');
       })
-      .catch((error) => console.log(error.message));
+      .catch((error) => {
+        let alertMessage = '';
+        if (!email || !password) alertMessage = 'Fill in all the fields';
+        else alertMessage = error.message;
+
+        Alert.alert('Error during log in', alertMessage);
+      });
   };
 
   // useEffect((user) => {
