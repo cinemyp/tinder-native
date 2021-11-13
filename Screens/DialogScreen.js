@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
+import { database } from '../firebase';
 import { StyleSheet, View } from 'react-native';
 import { Bubble, GiftedChat } from 'react-native-gifted-chat';
 import { getBottomSpace } from 'react-native-iphone-x-helper';
@@ -7,8 +8,9 @@ import { PRIMARY_COLOR } from '../constants/colors';
 
 export default DialogScreen = () => {
   const [messages, setMessages] = useState([]);
-
+  let messagesRef = null;
   useEffect(() => {
+    messagesRef = database.ref('messages');
     setMessages([]);
   }, []);
 
