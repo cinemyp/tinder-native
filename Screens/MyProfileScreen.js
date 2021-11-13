@@ -7,15 +7,18 @@ import { Text, Button } from 'react-native-elements';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import Layout from '../constants/Layout';
+import { getUserAge } from '../utils/date';
 
 export default function MyProfileScreen({
-  age = 25,
   onPressSettings,
   onPressEdit,
   navigation,
 }) {
   const { dispatch, currentUser } = useStoreon('currentUser');
-  const { name } = currentUser;
+  const { name, birthdayDate } = currentUser;
+
+  const age = getUserAge(birthdayDate.seconds);
+
   const handlePressLogout = () => {
     //TODO: заменить на апи метод
     auth

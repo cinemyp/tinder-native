@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Alert, KeyboardAvoidingView, StyleSheet } from 'react-native';
+import { useStoreon } from 'storeon/react';
 import { RegistrationStepOne } from '../components/Registration/RegistrationStepOne';
 import { RegistrationStepThree } from '../components/Registration/RegistrationStepThree';
 import { RegistrationStepTwo } from '../components/Registration/RegistrationStepTwo';
@@ -13,11 +14,13 @@ const defaultState = {
   date: new Date(),
 };
 
+const INITIAL_STEP = 0;
+const MAX_STEPS = 3;
+
 export const RegisterScreen = () => {
   const [state, setState] = useState(defaultState);
-  const [step, setStep] = useState(1);
-
-  const maxSteps = 3;
+  const [step, setStep] = useState(INITIAL_STEP);
+  const { dispatch } = useStoreon('authState');
 
   const nextStep = () => {
     switch (step) {
@@ -79,7 +82,7 @@ export const RegisterScreen = () => {
 
   const handlePressRegister = () => {
     const { email, password, name, date } = state;
-
+    dispatch('auth/update', { registration: true });
     auth
       .createUserWithEmailAndPassword(email, password)
       .then((userCredentials) => {
@@ -135,6 +138,8 @@ export const RegisterScreen = () => {
       })
       .then((docRef) => {
         firestore.collection('users').doc(uid).update({ avatarId: docRef.id });
+
+        dispatch('auth/update', { registration: false });
       });
   };
 

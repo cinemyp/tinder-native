@@ -19,6 +19,7 @@ export const RegistrationStepOne = ({ setState, next, values, styles }) => {
           autoCapitalize={'none'}
           autoCorrect={false}
           returnKeyType={'next'}
+          textContentType={'emailAddress'}
         />
         <TextInput
           placeholder={'Name'}
@@ -31,6 +32,7 @@ export const RegistrationStepOne = ({ setState, next, values, styles }) => {
           onSubmitEditing={() => this.passwordInput.focus()}
           autoCorrect={false}
           returnKeyType={'next'}
+          textContentType={'username'}
         />
         <TextInput
           placeholder={'Password'}
@@ -41,6 +43,7 @@ export const RegistrationStepOne = ({ setState, next, values, styles }) => {
             setState((prevState) => ({ ...prevState, password: text }))
           }
           secureTextEntry
+          textContentType={'password'}
         />
       </View>
       <View style={styles['buttonContainer']}>

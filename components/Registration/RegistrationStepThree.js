@@ -6,6 +6,7 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 
 export const RegistrationStepThree = ({ setState, next, values, styles }) => {
   const [selectedImage, setSelectedImage] = React.useState(null);
+  const [showButton, setShowButton] = React.useState(false);
 
   let openImagePickerAsync = async () => {
     let permissionResult =
@@ -28,11 +29,13 @@ export const RegistrationStepThree = ({ setState, next, values, styles }) => {
     }
     setSelectedImage({ localUri: pickerResult.uri });
     setState((prevState) => ({ ...prevState, imageUri: pickerResult.uri }));
+    setShowButton(true);
   };
 
   const handlePressRemoveSelectedImage = () => {
     setSelectedImage(null);
     setState((prevState) => ({ ...prevState, imageUri: '' }));
+    setShowButton(false);
   };
 
   return (
@@ -77,11 +80,14 @@ export const RegistrationStepThree = ({ setState, next, values, styles }) => {
       </View>
 
       <View style={styles['buttonContainer']}>
-        {selectedImage && (
+        {showButton && (
           <Button
             title={'Register'}
             buttonStyle={styles['button']}
-            onPress={next}
+            onPress={() => {
+              setShowButton(false);
+              next();
+            }}
           />
         )}
       </View>
