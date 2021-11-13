@@ -138,7 +138,7 @@ export const RegisterScreen = () => {
       })
       .then((docRef) => {
         firestore.collection('users').doc(uid).update({ avatarId: docRef.id });
-
+        dispatch('user/get');
         dispatch('auth/update', { registration: false });
       });
   };

@@ -6,7 +6,6 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 export const RegistrationStepTwo = ({ setState, next, values, styles }) => {
   const handleChangeDate = (event, selectedDate) => {
     setState((prevState) => ({ ...prevState, date: selectedDate }));
-    console.log(selectedDate);
   };
   return (
     <>

@@ -7,9 +7,8 @@ import { useStoreon } from 'storeon/react';
 
 export default Main = () => {
   const [state, setState] = useState({ loaded: false });
-  const { authState, dispatch } = useStoreon('authState');
+  const { authState } = useStoreon('authState');
 
-  console.log(authState);
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
       if (!user) {

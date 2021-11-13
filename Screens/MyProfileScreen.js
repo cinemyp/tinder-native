@@ -2,22 +2,24 @@ import React, { useEffect } from 'react';
 import { auth } from '../firebase';
 import { useStoreon } from 'storeon/react';
 import { StatusBar } from 'expo-status-bar';
-import { Image, StyleSheet, View } from 'react-native';
+import { ActivityIndicator, Image, StyleSheet, View } from 'react-native';
 import { Text, Button } from 'react-native-elements';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import Layout from '../constants/Layout';
 import { getUserAge } from '../utils/date';
+import LoadingView from '../components/LoadingView';
 
 export default function MyProfileScreen({
   onPressSettings,
   onPressEdit,
   navigation,
 }) {
-  const { dispatch, currentUser } = useStoreon('currentUser');
+  const { currentUser } = useStoreon('currentUser');
   const { name, birthdayDate } = currentUser;
+  const [loading, setLoading] = React.useState(false);
 
-  const age = getUserAge(birthdayDate.seconds);
+  const age = getUserAge(birthdayDate?.seconds ?? 0);
 
   const handlePressLogout = () => {
     //TODO: заменить на апи метод
@@ -27,10 +29,6 @@ export default function MyProfileScreen({
       .catch((error) => alert(error.message));
   };
 
-  useEffect(() => {
-    dispatch('user/get');
-  }, []);
-
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.imageContainer}>
@@ -39,7 +37,14 @@ export default function MyProfileScreen({
           source={{
             uri: currentUser.avatarUrl,
           }}
+          onLoadStart={() => {
+            setLoading(true);
+          }}
+          onLoadEnd={() => {
+            setLoading(false);
+          }}
         />
+        {loading && <LoadingView />}
       </View>
       <Text h2 style={styles.name}>
         {name}, {age}
@@ -85,6 +90,7 @@ const styles = StyleSheet.create({
   },
   imageContainer: {
     margin: 20,
+    position: 'relative',
   },
   name: {
     color: '#000',
