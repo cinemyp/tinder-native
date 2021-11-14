@@ -5,7 +5,6 @@ import AuthApi from '../api/AuthApi';
 import { RegistrationStepOne } from '../components/Registration/RegistrationStepOne';
 import { RegistrationStepThree } from '../components/Registration/RegistrationStepThree';
 import { RegistrationStepTwo } from '../components/Registration/RegistrationStepTwo';
-import { auth, firestore, firebase } from '../firebase';
 
 const defaultState = {
   email: '',

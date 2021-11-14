@@ -1,29 +1,37 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { database } from '../firebase';
-import { StyleSheet, View } from 'react-native';
+import { auth, firestore } from '../firebase';
+import { StyleSheet } from 'react-native';
 import { Bubble, GiftedChat } from 'react-native-gifted-chat';
 import { getBottomSpace } from 'react-native-iphone-x-helper';
 import { EmptyChatView } from '../components/EmptyViews/EmptyChatView';
 import { PRIMARY_COLOR } from '../constants/colors';
+import { useStoreon } from 'storeon/react';
+import ChatApi from '../api/ChatApi';
 
-export default DialogScreen = () => {
+export default DialogScreen = ({ route }) => {
   const [messages, setMessages] = useState([]);
-  useEffect(() => {
-    setMessages([]);
+
+  const { dialog } = route.params;
+  const { currentUser } = useStoreon('currentUser');
+
+  const handleSend = useCallback((messages = []) => {
+    const { uid } = auth.currentUser;
+    const text = messages[0].text;
+
+    ChatApi.sendMessage(text, dialog, currentUser);
   }, []);
 
-  const onSend = useCallback((messages = []) => {
-    setMessages((previousMessages) =>
-      GiftedChat.append(previousMessages, messages)
-    );
+  useEffect(() => {
+    const messageListener = ChatApi.messagesHandler(dialog, setMessages);
+    return () => messageListener();
   }, []);
 
   return (
     <GiftedChat
       messages={messages}
-      onSend={(messages) => onSend(messages)}
+      onSend={(messages) => handleSend(messages)}
       user={{
-        _id: 1,
+        _id: auth.currentUser.uid,
       }}
       messagesContainerStyle={styles.messagesContainer}
       renderBubble={(props) => {

@@ -1,49 +1,18 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useEffect, useState } from 'react';
-import { ScrollView, StyleSheet, Text } from 'react-native';
-import { Avatar, ListItem } from 'react-native-elements';
+import { ScrollView, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Dialog } from '../components/Dialog/Dialog';
 import { auth, firestore } from '../firebase';
 
-export default function MessengerScreen({ navigation }) {
-  const messages = [
-    {
-      id: 0,
-      avatar:
-        'https://images.pexels.com/photos/774909/pexels-photo-774909.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260',
-      name: 'Amelia, 27',
-      message: "Let's get to your favorite restaurant.",
-    },
-    {
-      id: 1,
-      avatar:
-        'https://images.pexels.com/photos/774909/pexels-photo-774909.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260',
-      name: 'Amelia, 27',
-      message: "Let's get to your favorite restaurant.",
-    },
-    {
-      id: 2,
-      avatar:
-        'https://images.pexels.com/photos/774909/pexels-photo-774909.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260',
-      name: 'Amelia, 27',
-      message: "Let's get to your favorite restaurant.",
-    },
-    {
-      id: 3,
-      avatar:
-        'https://images.pexels.com/photos/774909/pexels-photo-774909.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260',
-      name: 'Amelia, 27',
-      message: "Let's get to your favorite restaurant.",
-    },
-  ];
+const LATEST_MESSAGE_DEFAULT = 'New Dialog';
 
+export default function MessengerScreen({ navigation }) {
   const [dialogs, setDialogs] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const { uid } = auth.currentUser;
-    console.log(uid);
     const unsubscribe = firestore
       .collection('dialogs')
       .doc(uid)
@@ -62,10 +31,6 @@ export default function MessengerScreen({ navigation }) {
     return () => unsubscribe();
   }, []);
 
-  useEffect(() => {
-    console.log(dialogs);
-  }, [dialogs]);
-
   const handlePressDialog = (item) => {
     navigation.navigate('Dialog', { dialog: item });
   };
@@ -81,7 +46,9 @@ export default function MessengerScreen({ navigation }) {
             key={_id}
             avatar={''}
             name={user.name}
-            message={latestMessage.text}
+            message={
+              latestMessage ? latestMessage.text : LATEST_MESSAGE_DEFAULT
+            }
             onPressDialog={() =>
               handlePressDialog({ _id, latestMessage, user })
             }
