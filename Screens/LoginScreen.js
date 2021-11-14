@@ -9,44 +9,21 @@ import {
 } from 'react-native';
 import { Button, Text } from 'react-native-elements';
 import { useStoreon } from 'storeon/react';
-import { auth } from '../firebase';
+import authApi from '../api/AuthApi';
 
 export const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const { dispatch } = useStoreon('user');
+  const { dispatch } = useStoreon('user/get');
 
   const handlePressRegisterLink = () => {
     navigation.navigate('Register');
   };
 
   const handlePressLogin = () => {
-    auth
-      .signInWithEmailAndPassword(email, password)
-      .then((userCredentials) => {
-        const user = userCredentials.user;
-        //запрашиваем данные о пользователе и сохраняем в сторе
-        dispatch('user/get');
-      })
-      .catch((error) => {
-        let alertMessage = '';
-        if (!email || !password) alertMessage = 'Fill in all the fields';
-        else alertMessage = error.message;
-
-        Alert.alert('Error during log in', alertMessage);
-      });
+    authApi.signIn(email, password, dispatch);
   };
-
-  // useEffect((user) => {
-  //   const unsubscribe = auth.onAuthStateChanged((user) => {
-  //     if (user) {
-  //       navigation.replace('HomeTabs');
-  //     }
-  //   });
-
-  //   return unsubscribe;
-  // }, []);
 
   return (
     <KeyboardAvoidingView style={styles['container']} behavior={'padding'}>

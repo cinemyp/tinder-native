@@ -9,6 +9,7 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import Layout from '../constants/Layout';
 import { getUserAge } from '../utils/date';
 import LoadingView from '../components/LoadingView';
+import AuthApi from '../api/AuthApi';
 
 export default function MyProfileScreen({
   onPressSettings,
@@ -22,11 +23,7 @@ export default function MyProfileScreen({
   const age = getUserAge(birthdayDate?.seconds ?? 0);
 
   const handlePressLogout = () => {
-    //TODO: заменить на апи метод
-    auth
-      .signOut()
-      .then(() => {})
-      .catch((error) => alert(error.message));
+    AuthApi.signOut();
   };
 
   return (

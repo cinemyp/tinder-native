@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Alert, KeyboardAvoidingView, StyleSheet } from 'react-native';
 import { useStoreon } from 'storeon/react';
+import AuthApi from '../api/AuthApi';
 import { RegistrationStepOne } from '../components/Registration/RegistrationStepOne';
 import { RegistrationStepThree } from '../components/Registration/RegistrationStepThree';
 import { RegistrationStepTwo } from '../components/Registration/RegistrationStepTwo';
@@ -81,66 +82,7 @@ export const RegisterScreen = () => {
   ];
 
   const handlePressRegister = () => {
-    const { email, password, name, date } = state;
-    dispatch('auth/update', { registration: true });
-    auth
-      .createUserWithEmailAndPassword(email, password)
-      .then((userCredentials) => {
-        const { uid } = auth.currentUser;
-        firestore
-          .collection('users')
-          .doc(uid)
-          .set({ name, email, birthdayDate: date });
-      })
-      .then(() => fetch(state.imageUri))
-      .then((response) => response.blob())
-      .then((blob) => {
-        const childPath = `images/${
-          auth.currentUser.uid
-        }/${Math.random().toString(36)}`;
-
-        const task = firebase.storage().ref().child(childPath).put(blob);
-
-        const taskProgress = (snapshot) => {
-          console.log(`transferred: ${snapshot.bytesTransferred}`);
-          //TODO: прогресс бар
-        };
-
-        const taskCompleted = () => {
-          task.snapshot.ref.getDownloadURL().then((snapshot) => {
-            saveProfileData(snapshot);
-            console.log(snapshot);
-          });
-        };
-
-        const taskError = (snapshot) => {
-          console.log(snapshot);
-        };
-
-        task.on('state_changed', taskProgress, taskError, taskCompleted);
-      })
-      .catch((error) => {
-        alert(error.message);
-        console.log(error.message);
-      });
-  };
-
-  const saveProfileData = (data) => {
-    const { uid } = auth.currentUser;
-    //TODO: заменить на апи метод
-    firestore
-      .collection('images')
-      .doc(uid)
-      .collection('userImages')
-      .add({
-        downloadURL: data,
-        uploaded: firebase.firestore.FieldValue.serverTimestamp(),
-      })
-      .then((docRef) => {
-        firestore.collection('users').doc(uid).update({ avatarId: docRef.id });
-        dispatch('user/get');
-        dispatch('auth/update', { registration: false });
-      });
+    AuthApi.signOn(state, dispatch);
   };
 
   return (

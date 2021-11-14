@@ -67,24 +67,24 @@ export default function MessengerScreen({ navigation }) {
   }, [dialogs]);
 
   const handlePressDialog = (item) => {
-    //TODO: передать данные в Store
     navigation.navigate('Dialog', { dialog: item });
   };
   const handlePressAvatarDialog = () => {
-    //TODO: передать данные в Store
     navigation.navigate('Profile');
   };
 
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView style={styles.fullHeight}>
-        {dialogs.map(({ _id, latestMessage, name, user }) => (
+        {dialogs.map(({ _id, latestMessage, user }) => (
           <Dialog
             key={_id}
             avatar={''}
             name={user.name}
             message={latestMessage.text}
-            onPressDialog={() => handlePressDialog(item)}
+            onPressDialog={() =>
+              handlePressDialog({ _id, latestMessage, user })
+            }
             onPressAvatarDialog={handlePressAvatarDialog}
           />
         ))}

@@ -8,9 +8,7 @@ import { PRIMARY_COLOR } from '../constants/colors';
 
 export default DialogScreen = () => {
   const [messages, setMessages] = useState([]);
-  let messagesRef = null;
   useEffect(() => {
-    messagesRef = database.ref('messages');
     setMessages([]);
   }, []);
 
@@ -41,7 +39,6 @@ export default DialogScreen = () => {
       }}
       renderChatEmpty={EmptyChatView}
       inverted={true}
-      alwaysShowSend
       bottomOffset={getBottomSpace()}
     />
   );
