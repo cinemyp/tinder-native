@@ -52,7 +52,10 @@ export const RegistrationStepThree = ({ setState, next, values, styles }) => {
           title={'Go next'}
           buttonStyle={styles['button']}
           onPress={() => {
-            setState((prevState) => ({ ...prevState, genderId: id }));
+            setState((prevState) => ({
+              ...prevState,
+              genderId: selectedGender,
+            }));
             next();
           }}
           disabled={selectedGender === null}
