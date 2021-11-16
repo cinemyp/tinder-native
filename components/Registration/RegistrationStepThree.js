@@ -1,95 +1,62 @@
-import React from 'react';
-import { StyleSheet, View, Image } from 'react-native';
+import React, { useEffect } from 'react';
+import { TextInput, View } from 'react-native';
 import { Button } from 'react-native-elements';
-import * as ImagePicker from 'expo-image-picker';
-import Ionicons from '@expo/vector-icons/Ionicons';
+import GenderApi from '../../api/GenderApi';
+import { capitalizeFirstLetter } from '../../utils';
 
 export const RegistrationStepThree = ({ setState, next, values, styles }) => {
-  const [selectedImage, setSelectedImage] = React.useState(null);
-  const [showButton, setShowButton] = React.useState(false);
+  const [selectedGender, setSelectedGender] = React.useState(null);
+  const [genders, setGenders] = React.useState([]);
 
-  let openImagePickerAsync = async () => {
-    let permissionResult =
-      await ImagePicker.requestMediaLibraryPermissionsAsync();
+  const handlePressButton = (id) => {
+    setSelectedGender(id);
+  };
 
-    if (permissionResult.granted === false) {
-      alert('Permission to access camera roll is required!');
-      return;
-    }
+  const GenderButton = ({ name, _id }) => (
+    <Button
+      title={name}
+      buttonStyle={[
+        styles['gender_button'],
+        selectedGender !== _id && selectedGender !== null
+          ? styles['gender_button__nonselected']
+          : null,
+      ]}
+      onPress={(e) => {
+        handlePressButton(_id);
+      }}
+      activeOpacity={1}
+    />
+  );
 
-    let pickerResult = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: true,
-      aspect: [2, 3],
-      quality: 1,
+  useEffect(() => {
+    GenderApi.getGenders().then((data) => {
+      setGenders(data);
     });
-
-    if (pickerResult.cancelled === true) {
-      return;
-    }
-    setSelectedImage({ localUri: pickerResult.uri });
-    setState((prevState) => ({ ...prevState, imageUri: pickerResult.uri }));
-    setShowButton(true);
-  };
-
-  const handlePressRemoveSelectedImage = () => {
-    setSelectedImage(null);
-    setState((prevState) => ({ ...prevState, imageUri: '' }));
-    setShowButton(false);
-  };
+  }, []);
 
   return (
     <>
-      <View style={styles['imageContainer']}>
-        {selectedImage ? (
-          <>
-            <View style={styles['removeBtn']}>
-              <Button
-                icon={
-                  <Ionicons
-                    name={'close-circle-outline'}
-                    color={'red'}
-                    size={42}
-                  />
-                }
-                type={'clear'}
-                onPress={handlePressRemoveSelectedImage}
-              />
-            </View>
-
-            <Image
-              source={{ uri: selectedImage.localUri }}
-              style={styles['thumbnail']}
+      <View style={styles['gender_btnContainer']}>
+        {genders.length > 0 &&
+          genders.map((item) => (
+            <GenderButton
+              key={item._id}
+              name={capitalizeFirstLetter(item.name)}
+              _id={item._id}
             />
-          </>
-        ) : (
-          <View style={styles['addPhotoBtn']}>
-            <Button
-              icon={
-                <Ionicons
-                  name={'add-circle-outline'}
-                  color={'#a5a5a5'}
-                  size={64}
-                />
-              }
-              type={'clear'}
-              onPress={openImagePickerAsync}
-            />
-          </View>
-        )}
+          ))}
       </View>
 
       <View style={styles['buttonContainer']}>
-        {showButton && (
-          <Button
-            title={'Register'}
-            buttonStyle={styles['button']}
-            onPress={() => {
-              setShowButton(false);
-              next();
-            }}
-          />
-        )}
+        <Button
+          title={'Go next'}
+          buttonStyle={styles['button']}
+          onPress={() => {
+            setState((prevState) => ({ ...prevState, genderId: id }));
+            next();
+          }}
+          disabled={selectedGender === null}
+        />
       </View>
     </>
   );

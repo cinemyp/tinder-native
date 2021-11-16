@@ -24,7 +24,10 @@ const signOut = () => {
     .then(() => {})
     .catch((error) => Alert.alert(error.message));
 };
-const signOn = ({ email, password, name, date, imageUri }, dispatch) => {
+const signOn = (
+  { email, password, name, date, imageUri, genderId },
+  dispatch
+) => {
   dispatch('auth/update', { registration: true });
   auth
     .createUserWithEmailAndPassword(email, password)
@@ -33,7 +36,7 @@ const signOn = ({ email, password, name, date, imageUri }, dispatch) => {
       firestore
         .collection('users')
         .doc(uid)
-        .set({ name, email, birthdayDate: date });
+        .set({ name, email, birthdayDate: date, genderId });
     })
     .then(() => fetch(imageUri))
     .then((response) => response.blob())

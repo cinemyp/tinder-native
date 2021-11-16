@@ -5,12 +5,15 @@ import AuthApi from '../api/AuthApi';
 import { RegistrationStepOne } from '../components/Registration/RegistrationStepOne';
 import { RegistrationStepThree } from '../components/Registration/RegistrationStepThree';
 import { RegistrationStepTwo } from '../components/Registration/RegistrationStepTwo';
+import { RegistrationStepFour } from '../components/Registration/RegistrationSterFour';
+import { PRIMARY_COLOR } from '../constants/colors';
 
 const defaultState = {
   email: '',
   password: '',
   name: '',
   imageUri: '',
+  genderId: '',
   date: new Date(),
 };
 
@@ -35,6 +38,8 @@ export const RegisterScreen = () => {
         //TODO: проверка на совершеннолетие
         break;
       case 2:
+        break;
+      case 3:
         if (!state.imageUri) {
           return;
         }
@@ -71,6 +76,16 @@ export const RegisterScreen = () => {
     {
       component: (
         <RegistrationStepThree
+          setState={setState}
+          next={nextStep}
+          values={state}
+          styles={styles}
+        />
+      ),
+    },
+    {
+      component: (
+        <RegistrationStepFour
           setState={setState}
           next={nextStep}
           values={state}
@@ -153,5 +168,22 @@ const styles = StyleSheet.create({
   addPhotoBtn: {
     position: 'absolute',
     zIndex: 99,
+  },
+  gender_btnContainer: {
+    justifyContent: 'center',
+    marginBottom: 50,
+  },
+  gender_button: {
+    marginTop: 50,
+    width: 150,
+    backgroundColor: PRIMARY_COLOR,
+    borderWidth: 1,
+    borderColor: 'black',
+  },
+  gender_button__nonselected: {
+    marginTop: 50,
+    width: 150,
+    backgroundColor: PRIMARY_COLOR + '95',
+    borderWidth: 0,
   },
 });

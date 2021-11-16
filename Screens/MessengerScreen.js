@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { ScrollView, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Dialog } from '../components/Dialog/Dialog';
+import { EmptyMessengerView } from '../components/EmptyViews/EmptyMessengerView';
 import { auth, firestore } from '../firebase';
 
 const LATEST_MESSAGE_DEFAULT = 'New Dialog';
@@ -37,6 +38,8 @@ export default function MessengerScreen({ navigation }) {
   const handlePressAvatarDialog = () => {
     navigation.navigate('Profile');
   };
+
+  if (dialogs.length === 0) return <EmptyMessengerView />;
 
   return (
     <SafeAreaView style={styles.container}>
