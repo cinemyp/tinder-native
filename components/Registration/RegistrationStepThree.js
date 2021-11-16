@@ -21,7 +21,7 @@ export const RegistrationStepThree = ({ setState, next, values, styles }) => {
           ? styles['gender_button__nonselected']
           : null,
       ]}
-      onPress={(e) => {
+      onPress={() => {
         handlePressButton(_id);
       }}
       activeOpacity={1}

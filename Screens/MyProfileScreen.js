@@ -64,7 +64,12 @@ export default function MyProfileScreen({
           onPress={onPressEdit}
         />
       </View>
-      <Button title={'logout'.toUpperCase()} onPress={handlePressLogout} />
+      <Button
+        title={'Log out'}
+        onPress={handlePressLogout}
+        type={'clear'}
+        titleStyle={styles['logOut']}
+      />
       <StatusBar style="auto" />
     </SafeAreaView>
   );
@@ -98,5 +103,8 @@ const styles = StyleSheet.create({
     width: Layout.window.width - 100,
     justifyContent: 'space-between',
     marginTop: 10,
+  },
+  logOut: {
+    color: 'red',
   },
 });

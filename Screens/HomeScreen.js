@@ -114,7 +114,6 @@ export default function HomeScreen({ navigation }) {
       ) : (
         <EmptyProfileView titleReload={'Reload'} onReload={handleReload} />
       )}
-
       <StatusBar style="auto" />
     </SafeAreaView>
   );
