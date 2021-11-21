@@ -54,6 +54,9 @@ export default function HomeScreen({ navigation }) {
 
   const loadProfiles = () => {
     ProfilesApi.getProfiles(currentUser).then((profilesData) => {
+      if (profilesData.length === 0) {
+        return;
+      }
       setProfilesData(profilesData);
       setViewProfiles(true);
     });
