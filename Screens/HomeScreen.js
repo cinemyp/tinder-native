@@ -11,8 +11,13 @@ import { useStoreon } from 'storeon/react';
 export default function HomeScreen({ navigation }) {
   const [viewProfiles, setViewProfiles] = useState(false);
   const [profilesData, setProfilesData] = useState([]);
+  const [currentIndex, setCurrentIndex] = useState(0);
 
   const { currentUser } = useStoreon('currentUser');
+
+  const handleSwipe = () => {
+    setCurrentIndex((prevState) => prevState + 1);
+  };
 
   const handleSwipedLeft = (index) => {
     console.log('Swipe left');
@@ -31,10 +36,13 @@ export default function HomeScreen({ navigation }) {
   const handleReload = () => {
     console.log('Reload');
     loadProfiles();
+    setCurrentIndex(0);
   };
 
   const handleTapCard = () => {
-    navigation.navigate('Profile');
+    console.log(currentIndex);
+    console.log(profilesData[currentIndex]);
+    navigation.navigate('Profile', profilesData[currentIndex]);
   };
 
   useEffect(() => {
@@ -61,6 +69,7 @@ export default function HomeScreen({ navigation }) {
           backgroundColor={'white'}
           cardHorizontalMargin={0}
           stackSize={2}
+          onSwiped={handleSwipe}
           onSwipedLeft={handleSwipedLeft}
           onSwipedRight={handleSwipedRight}
           onSwipedAll={handleSwipedAll}

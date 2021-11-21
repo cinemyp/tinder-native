@@ -23,6 +23,7 @@ const MAX_STEPS = 3;
 export const RegisterScreen = () => {
   const [state, setState] = useState(defaultState);
   const [step, setStep] = useState(INITIAL_STEP);
+  const [progressLoading, setProgressLoading] = useState(0);
   const { dispatch } = useStoreon('authState');
 
   const nextStep = () => {
@@ -90,13 +91,14 @@ export const RegisterScreen = () => {
           next={nextStep}
           values={state}
           styles={styles}
+          progressLoading={progressLoading}
         />
       ),
     },
   ];
 
   const handlePressRegister = () => {
-    AuthApi.signOn(state, dispatch);
+    AuthApi.signOn(state, dispatch, setProgressLoading);
   };
 
   return (

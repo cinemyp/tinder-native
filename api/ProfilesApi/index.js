@@ -10,9 +10,9 @@ const getProfiles = async (currentUser) => {
       snapshot.forEach((doc) => {
         const newUser = getUser(doc);
 
-        if (newUser.genderId !== currentUser.genderId) {
-          users.push(getUser(doc));
-        }
+        // if (newUser.genderId !== currentUser.genderId) {
+        users.push(getUser(doc));
+        // }
       });
 
       return users;

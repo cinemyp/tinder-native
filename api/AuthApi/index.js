@@ -26,7 +26,8 @@ const signOut = () => {
 };
 const signOn = (
   { email, password, name, date, imageUri, genderId },
-  dispatch
+  dispatch,
+  setProgressLoading
 ) => {
   dispatch('auth/update', { registration: true });
   auth
@@ -49,6 +50,7 @@ const signOn = (
 
       const taskProgress = (snapshot) => {
         console.log(`transferred: ${snapshot.bytesTransferred}`);
+        setProgressLoading(snapshot.bytesTransferred);
         //TODO: прогресс бар
       };
 

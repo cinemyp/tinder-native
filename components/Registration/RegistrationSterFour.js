@@ -3,8 +3,16 @@ import { StyleSheet, View, Image } from 'react-native';
 import { Button } from 'react-native-elements';
 import * as ImagePicker from 'expo-image-picker';
 import Ionicons from '@expo/vector-icons/Ionicons';
+import ProgressBar from 'react-native-progress/Bar';
+import { PRIMARY_COLOR } from '../../constants/colors';
 
-export const RegistrationStepFour = ({ setState, next, values, styles }) => {
+export const RegistrationStepFour = ({
+  setState,
+  next,
+  values,
+  styles,
+  progressLoading,
+}) => {
   const [selectedImage, setSelectedImage] = React.useState(null);
   const [showButton, setShowButton] = React.useState(false);
 
@@ -44,13 +52,7 @@ export const RegistrationStepFour = ({ setState, next, values, styles }) => {
         {selectedImage && showButton ? (
           <View style={styles['removeBtn']}>
             <Button
-              icon={
-                <Ionicons
-                  name={'close-circle-outline'}
-                  color={'red'}
-                  size={42}
-                />
-              }
+              icon={<Ionicons name={'close-circle'} color={'red'} size={42} />}
               type={'clear'}
               onPress={handlePressRemoveSelectedImage}
             />
@@ -91,6 +93,13 @@ export const RegistrationStepFour = ({ setState, next, values, styles }) => {
           />
         )}
       </View>
+      {selectedImage && !showButton && (
+        <ProgressBar
+          progress={progressLoading}
+          width={250}
+          color={PRIMARY_COLOR}
+        />
+      )}
     </>
   );
 };
