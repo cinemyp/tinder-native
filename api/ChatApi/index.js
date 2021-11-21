@@ -15,7 +15,7 @@ const sendMessage = (text, dialog, currentUser) => {
     .collection('messages')
     .add({
       text,
-      createdAt: new Date().getTime(),
+      createdAt: Date.now(),
       user: {
         _id: currentUser.id,
         name: currentUser.name,
@@ -28,10 +28,7 @@ const sendMessage = (text, dialog, currentUser) => {
     .doc(uid)
     .collection('userDialogs')
     .doc(dialog._id)
-    .set(
-      { latestMessage: { text, createdAt: new Date().getTime() } },
-      { merge: true }
-    );
+    .set({ latestMessage: { text, createdAt: Date.now() } }, { merge: true });
 };
 
 const messagesHandler = (dialog, setMessages) => {
@@ -50,7 +47,7 @@ const messagesHandler = (dialog, setMessages) => {
         const data = {
           _id: doc.id,
           text: '',
-          createdAt: new Date().getTime(),
+          createdAt: Date.now(),
           ...firebaseData,
         };
         if (!firebaseData.system) {

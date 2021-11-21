@@ -7,6 +7,7 @@ import { Card } from '../components/Card';
 import { EmptyProfileView } from '../components/EmptyViews/EmptyProfileView';
 import ProfilesApi from '../api/ProfilesApi';
 import { useStoreon } from 'storeon/react';
+import LikeApi from '../api/LikeApi';
 
 export default function HomeScreen({ navigation }) {
   const [viewProfiles, setViewProfiles] = useState(false);
@@ -23,6 +24,8 @@ export default function HomeScreen({ navigation }) {
     console.log('Swipe left');
   };
   const handleSwipedRight = (index) => {
+    const { _id } = profilesData[index];
+    LikeApi.likeUser(_id);
     console.log('Swipe right');
   };
 
