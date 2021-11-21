@@ -1,6 +1,7 @@
 import React from 'react';
 import { Image, SafeAreaView, StyleSheet, View } from 'react-native';
 import { Divider, Icon, Text } from 'react-native-elements';
+import LoadingView from '../components/LoadingView';
 import Layout from '../constants/Layout';
 
 const Social = ({ name }) => (
@@ -13,15 +14,15 @@ const Social = ({ name }) => (
 );
 
 export const ProfileScreen = ({
-  name = 'Amelia',
-  desc,
-  pic = 'https://images.pexels.com/photos/774909/pexels-photo-774909.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260',
   socials = [{ title: 'instagram' }],
+  route,
 }) => {
+  const { profile } = route.params;
+  const { name, avatarUrl } = profile;
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.imageContainer}>
-        <Image source={{ uri: pic }} style={styles.image} />
+        <Image source={{ uri: avatarUrl }} style={styles.image} />
       </View>
       <Text h4 style={styles.name}>
         {name}
@@ -30,7 +31,7 @@ export const ProfileScreen = ({
       <Divider style={styles.divider} />
       <Text style={styles.desc}>
         I love to travel. I have a cat named pickles. If he likes you, I
-        probably will too. {desc}
+        probably will too.
       </Text>
       <Divider style={styles.divider} />
       <Text style={styles.desc}>Find me on Social here</Text>

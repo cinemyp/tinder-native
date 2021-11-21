@@ -40,8 +40,6 @@ export default function HomeScreen({ navigation }) {
   };
 
   const handleTapCard = () => {
-    console.log(currentIndex);
-    console.log(profilesData[currentIndex]);
     navigation.navigate('Profile', profilesData[currentIndex]);
   };
 
