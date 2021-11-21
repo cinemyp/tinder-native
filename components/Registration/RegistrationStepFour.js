@@ -1,10 +1,18 @@
 import React from 'react';
-import { StyleSheet, View, Image } from 'react-native';
+import { View, Image, Alert } from 'react-native';
 import { Button } from 'react-native-elements';
 import * as ImagePicker from 'expo-image-picker';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import ProgressBar from 'react-native-progress/Bar';
 import { PRIMARY_COLOR } from '../../constants/colors';
+import { manipulateAsync, SaveFormat } from 'expo-image-manipulator';
+
+const resizeOptions = {
+  newWidth: 500,
+  newHeight: 500,
+  compress: 1,
+  saveFormat: SaveFormat.JPEG,
+};
 
 export const RegistrationStepFour = ({
   setState,
@@ -21,7 +29,7 @@ export const RegistrationStepFour = ({
       await ImagePicker.requestMediaLibraryPermissionsAsync();
 
     if (permissionResult.granted === false) {
-      alert('Permission to access camera roll is required!');
+      Alert.alert('Permission to access camera roll is required!');
       return;
     }
 
@@ -35,8 +43,27 @@ export const RegistrationStepFour = ({
     if (pickerResult.cancelled === true) {
       return;
     }
-    setSelectedImage({ localUri: pickerResult.uri });
-    setState((prevState) => ({ ...prevState, imageUri: pickerResult.uri }));
+
+    resizeImage(pickerResult.uri);
+  };
+
+  const resizeImage = async (imageUri) => {
+    const manipResult = await manipulateAsync(
+      imageUri,
+      [
+        {
+          resize: {
+            width: resizeOptions.newWidth,
+            height: resizeOptions.newHeight,
+          },
+        },
+      ],
+      { compress: resizeOptions.compress, format: resizeOptions.saveFormat }
+    );
+    console.log(manipResult);
+    const { uri } = manipResult;
+    setSelectedImage(uri);
+    setState((prevState) => ({ ...prevState, imageUri: uri }));
     setShowButton(true);
   };
 
@@ -59,10 +86,7 @@ export const RegistrationStepFour = ({
           </View>
         ) : null}
         {selectedImage && (
-          <Image
-            source={{ uri: selectedImage.localUri }}
-            style={styles['thumbnail']}
-          />
+          <Image source={{ uri: selectedImage }} style={styles['thumbnail']} />
         )}
         {!selectedImage && (
           <View style={styles['addPhotoBtn']}>

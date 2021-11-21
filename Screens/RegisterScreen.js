@@ -5,7 +5,7 @@ import AuthApi from '../api/AuthApi';
 import { RegistrationStepOne } from '../components/Registration/RegistrationStepOne';
 import { RegistrationStepThree } from '../components/Registration/RegistrationStepThree';
 import { RegistrationStepTwo } from '../components/Registration/RegistrationStepTwo';
-import { RegistrationStepFour } from '../components/Registration/RegistrationSterFour';
+import { RegistrationStepFour } from '../components/Registration/RegistrationStepFour';
 import { PRIMARY_COLOR } from '../constants/colors';
 
 const defaultState = {
@@ -17,7 +17,7 @@ const defaultState = {
   date: new Date(),
 };
 
-const INITIAL_STEP = 0;
+const INITIAL_STEP = 3;
 const MAX_STEPS = 3;
 
 export const RegisterScreen = () => {
