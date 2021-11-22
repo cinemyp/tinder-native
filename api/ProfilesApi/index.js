@@ -21,7 +21,10 @@ const getProfiles = async (currentUser) => {
           if (newUser.genderId === currentUser.genderId) {
             return;
           }
-          const isLiked = await LikeApi.hasLiked(newUser._id);
+          const isLiked = await LikeApi.hasLiked(
+            newUser._id,
+            auth.currentUser.uid
+          );
           //Если мы лайкнули пользователя, то пропускаем
           if (!isLiked) {
             users.push(newUser);
@@ -37,7 +40,6 @@ const getProfiles = async (currentUser) => {
   users = await Promise.all(
     users.map(async (item) => {
       try {
-        console.log(item);
         const snapshot = await getAvatarImage(item._id, item.avatarId);
         if (snapshot.exists) {
           const { downloadURL } = snapshot.data();

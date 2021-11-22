@@ -33,11 +33,11 @@ export default MessageStackNavigator = () => {
       <Stack.Screen
         name={'Dialog'}
         component={DialogScreen}
-        options={{
-          headerTitle: name,
+        options={({ route }) => ({
+          headerTitle: route.params.dialog.participant.name,
           headerStyle: { height: 110 },
           headerBackTitle: BACK_TITLE,
-        }}
+        })}
       />
       <Stack.Screen
         name={'Profile'}

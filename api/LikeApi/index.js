@@ -1,10 +1,12 @@
+import { Alert } from 'react-native';
 import { auth, firestore, firebase } from '../../firebase';
+import ChatApi from '../ChatApi';
 
 /**
  * Метод лайка пользователя
  * @param {*} userToLikeId Айди профиля
  */
-const likeUser = (userToLikeId) => {
+const likeUser = async (userToLikeId) => {
   const { uid } = auth.currentUser;
 
   const likesRef = firestore
@@ -12,26 +14,30 @@ const likeUser = (userToLikeId) => {
     .doc(uid)
     .collection('userLikes');
 
-  hasLiked(userToLikeId, likesRef).then((exists) => {
-    if (exists === false) {
-      likesRef
-        .doc(userToLikeId)
-        .set({ liked: Date.now() })
-        .then(() => {});
+  try {
+    const hasLike = await hasLiked(userToLikeId, uid, likesRef);
+    if (hasLike === false) {
+      await likesRef.doc(userToLikeId).set({ liked: Date.now() });
     } else {
       console.log('Already Liked');
     }
-  });
+    const match = await hasLiked(uid, userToLikeId);
+    if (match) {
+      Alert.alert('You have a new match!');
+      ChatApi.createNewDialogs(uid, userToLikeId);
+    }
+  } catch (err) {
+    console.log(err);
+  }
 };
 /**
  * Проверяет, лайкнул ли авторизированный пользователь данный профиль
  * @param {*} userToLikeId Айди профиля
+ * @param {*} uid Айди пользователя
  * @param {*} likesRef Ссылка на коллекцию
  * @returns
  */
-const hasLiked = async (userToLikeId, likesRef = null) => {
-  const { uid } = auth.currentUser;
-
+const hasLiked = async (userToLikeId, uid, likesRef = null) => {
   if (likesRef === null) {
     likesRef = firestore.collection('likes').doc(uid).collection('userLikes');
   }

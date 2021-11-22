@@ -1,8 +1,36 @@
 import { auth, firestore, firebase } from '../../firebase';
+import UserApi from '../UserApi';
 
-const createNewDialog = (user) => {
-  const { uid } = auth.currentUser;
-  firestore.collection('dialogs').doc(uid).collection('userDialogs').add(user);
+const createNewDialogs = async (uid, userToDialogId) => {
+  try {
+    const user = await UserApi.getUserById(uid);
+    const userToDialog = await UserApi.getUserById(userToDialogId);
+
+    const userData = getUserToDialog(user);
+    const userToDialogData = getUserToDialog(userToDialog);
+
+    await createNewDialog(uid, userToDialogData);
+    await createNewDialog(userToDialogId, userData);
+  } catch (error) {
+    console.log('Error: create new dialogs ' + error);
+  }
+};
+
+const createNewDialog = async (uid, userToDialog) => {
+  return firestore
+    .collection('dialogs')
+    .doc(uid)
+    .collection('userDialogs')
+    .add(dialog(userToDialog));
+};
+
+const dialog = (user) => {
+  return { participant: { ...user } };
+};
+
+const getUserToDialog = (doc) => {
+  const data = doc.data();
+  return { _id: doc.id, name: data.name, avatarId: data.avatarId };
 };
 
 const sendMessage = (text, dialog, currentUser) => {
@@ -61,4 +89,4 @@ const messagesHandler = (dialog, setMessages) => {
     });
 };
 
-export default { createNewDialog, sendMessage, messagesHandler };
+export default { createNewDialogs, sendMessage, messagesHandler };
