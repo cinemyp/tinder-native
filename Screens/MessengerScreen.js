@@ -35,8 +35,8 @@ export default function MessengerScreen({ navigation }) {
   const handlePressDialog = (item) => {
     navigation.navigate('Dialog', { dialog: item });
   };
-  const handlePressAvatarDialog = () => {
-    navigation.navigate('Profile');
+  const handlePressAvatarDialog = (participant) => {
+    navigation.navigate('Profile', { profile: participant });
   };
 
   if (dialogs.length === 0) return <EmptyMessengerView />;
@@ -55,7 +55,7 @@ export default function MessengerScreen({ navigation }) {
             onPressDialog={() =>
               handlePressDialog({ _id, latestMessage, participant })
             }
-            onPressAvatarDialog={handlePressAvatarDialog}
+            onPressAvatarDialog={() => handlePressAvatarDialog(participant)}
           />
         ))}
       </ScrollView>

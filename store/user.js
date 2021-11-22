@@ -1,3 +1,4 @@
+import ImagesApi from '../api/ImagesApi';
 import { auth, firestore, firebase } from '../firebase';
 
 export const user = (store) => {
@@ -22,7 +23,7 @@ export const user = (store) => {
         }
       })
       .then((data) =>
-        getAvatarImage(data.id, data.avatarId).then((snapshot) => {
+        ImagesApi.getAvatarImage(data.id, data.avatarId).then((snapshot) => {
           if (snapshot.exists) {
             const { downloadURL } = snapshot.data();
 
@@ -37,12 +38,4 @@ export const user = (store) => {
         })
       );
   });
-};
-const getAvatarImage = (userId, avatarId) => {
-  return firestore
-    .collection('images')
-    .doc(userId)
-    .collection('userImages')
-    .doc(avatarId)
-    .get();
 };

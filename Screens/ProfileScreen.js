@@ -1,6 +1,7 @@
 import React from 'react';
 import { Image, SafeAreaView, StyleSheet, View } from 'react-native';
 import { Divider, Icon, Text } from 'react-native-elements';
+import UserApi from '../api/UserApi';
 import LoadingView from '../components/LoadingView';
 import Layout from '../constants/Layout';
 
@@ -17,15 +18,25 @@ export const ProfileScreen = ({
   socials = [{ title: 'instagram' }],
   route,
 }) => {
+  const [profileData, setProfileData] = React.useState(null);
   const { profile } = route.params;
-  const { name, avatarUrl } = profile;
+
+  React.useEffect(() => {
+    if (!profile.avatarUrl) {
+      UserApi.getUserById(profile._id).then((user) => {
+        setProfileData(user);
+      });
+    } else {
+      setProfileData(profile);
+    }
+  }, []);
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.imageContainer}>
-        <Image source={{ uri: avatarUrl }} style={styles.image} />
+        <Image source={{ uri: profileData?.avatarUrl }} style={styles.image} />
       </View>
       <Text h4 style={styles.name}>
-        {name}
+        {profileData?.name}
       </Text>
       <Text style={styles.desc}>Fashion Designer at Amelia & Co.</Text>
       <Divider style={styles.divider} />
