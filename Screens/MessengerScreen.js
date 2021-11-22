@@ -44,16 +44,16 @@ export default function MessengerScreen({ navigation }) {
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView style={styles.fullHeight}>
-        {dialogs.map(({ _id, latestMessage, user }) => (
+        {dialogs.map(({ _id, latestMessage, participant }) => (
           <Dialog
             key={_id}
             avatar={''}
-            name={user.name}
+            name={participant.name}
             message={
               latestMessage ? latestMessage.text : LATEST_MESSAGE_DEFAULT
             }
             onPressDialog={() =>
-              handlePressDialog({ _id, latestMessage, user })
+              handlePressDialog({ _id, latestMessage, participant })
             }
             onPressAvatarDialog={handlePressAvatarDialog}
           />

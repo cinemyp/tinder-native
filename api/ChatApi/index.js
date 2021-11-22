@@ -16,7 +16,7 @@ const sendMessage = (text, dialog, currentUser) => {
     .add({
       text,
       createdAt: Date.now(),
-      user: {
+      participant: {
         _id: currentUser.id,
         name: currentUser.name,
         avatarId: currentUser.avatarId,
@@ -51,7 +51,7 @@ const messagesHandler = (dialog, setMessages) => {
           ...firebaseData,
         };
         if (!firebaseData.system) {
-          data.user = {
+          data.participant = {
             ...firebaseData.user,
           };
         }

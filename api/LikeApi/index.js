@@ -1,5 +1,9 @@
 import { auth, firestore, firebase } from '../../firebase';
 
+/**
+ * Метод лайка пользователя
+ * @param {*} userToLikeId Айди профиля
+ */
 const likeUser = (userToLikeId) => {
   const { uid } = auth.currentUser;
 
@@ -19,7 +23,12 @@ const likeUser = (userToLikeId) => {
     }
   });
 };
-
+/**
+ * Проверяет, лайкнул ли авторизированный пользователь данный профиль
+ * @param {*} userToLikeId Айди профиля
+ * @param {*} likesRef Ссылка на коллекцию
+ * @returns
+ */
 const hasLiked = async (userToLikeId, likesRef = null) => {
   const { uid } = auth.currentUser;
 
