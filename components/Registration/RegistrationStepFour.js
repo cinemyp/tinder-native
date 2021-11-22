@@ -60,10 +60,26 @@ export const RegistrationStepFour = ({
       ],
       { compress: resizeOptions.compress, format: resizeOptions.saveFormat }
     );
-    console.log(manipResult);
+    const thumbnail = await manipulateAsync(
+      imageUri,
+      [
+        {
+          resize: {
+            width: 40,
+            height: 40,
+          },
+        },
+      ],
+      { compress: resizeOptions.compress, format: resizeOptions.saveFormat }
+    );
     const { uri } = manipResult;
+
     setSelectedImage(uri);
-    setState((prevState) => ({ ...prevState, imageUri: uri }));
+    setState((prevState) => ({
+      ...prevState,
+      imageUri: uri,
+      thumbnailUri: thumbnail.uri,
+    }));
     setShowButton(true);
   };
 

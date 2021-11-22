@@ -1,5 +1,6 @@
 import { Alert } from 'react-native';
 import { auth, firestore, firebase } from '../../firebase';
+import ImagesApi from '../ImagesApi';
 
 const signIn = (email, password, dispatch) => {
   auth
@@ -25,7 +26,7 @@ const signOut = () => {
     .catch((error) => Alert.alert(error.message));
 };
 const signOn = (
-  { email, password, name, date, imageUri, genderId },
+  { email, password, name, date, imageUri, thumbnailUri, genderId },
   dispatch,
   setProgressLoading
 ) => {
@@ -38,56 +39,23 @@ const signOn = (
         .collection('users')
         .doc(uid)
         .set({ name, email, birthdayDate: date, genderId });
+      return uid;
     })
-    .then(() => fetch(imageUri))
-    .then((response) => response.blob())
-    .then((blob) => {
-      const childPath = `images/${
-        auth.currentUser.uid
-      }/${Math.random().toString(36)}`;
-
-      const task = firebase.storage().ref().child(childPath).put(blob);
-
-      const taskProgress = (snapshot) => {
-        console.log(`transferred: ${snapshot.bytesTransferred}`);
-        setProgressLoading(snapshot.bytesTransferred);
-        //TODO: прогресс бар
-      };
-
-      const taskCompleted = () => {
-        task.snapshot.ref.getDownloadURL().then((snapshot) => {
-          saveProfileData(snapshot, dispatch);
-          console.log(snapshot);
-        });
-      };
-
-      const taskError = (snapshot) => {
-        console.log(snapshot);
-      };
-
-      task.on('state_changed', taskProgress, taskError, taskCompleted);
-    })
-    .catch((error) => {
-      Alert.alert(error.message);
-      console.log(error.message);
-    });
-};
-const saveProfileData = (data, dispatch) => {
-  const { uid } = auth.currentUser;
-
-  firestore
-    .collection('images')
-    .doc(uid)
-    .collection('userImages')
-    .add({
-      downloadURL: data,
-      uploaded: firebase.firestore.FieldValue.serverTimestamp(),
-    })
-    .then((docRef) => {
-      firestore.collection('users').doc(uid).update({ avatarId: docRef.id });
-      dispatch('user/get');
+    .then((uid) =>
+      ImagesApi.uploadAvatarImage(
+        uid,
+        imageUri,
+        thumbnailUri,
+        setProgressLoading
+      )
+    )
+    .then((snapshot) => {
+      saveProfileData(dispatch);
       dispatch('auth/update', { registration: false });
     });
+};
+const saveProfileData = (dispatch) => {
+  dispatch('user/get');
 };
 
 export default { signIn, signOut, signOn };

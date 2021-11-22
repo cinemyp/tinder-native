@@ -30,6 +30,7 @@ export const ProfileScreen = ({
       setProfileData(profile);
     }
   }, []);
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.imageContainer}>

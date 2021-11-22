@@ -13,11 +13,12 @@ const defaultState = {
   password: '',
   name: '',
   imageUri: '',
+  thumbnailUri: '',
   genderId: '',
   date: new Date(),
 };
 
-const INITIAL_STEP = 3;
+const INITIAL_STEP = 0;
 const MAX_STEPS = 3;
 
 export const RegisterScreen = () => {
