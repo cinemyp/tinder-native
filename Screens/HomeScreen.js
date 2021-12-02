@@ -43,7 +43,8 @@ export default function HomeScreen({ navigation }) {
   };
 
   const handleTapCard = () => {
-    navigation.navigate('Profile', profilesData[currentIndex]);
+    //TODO: вернуть навигацию обратно, когда будет полностью доделана страничка описания профиля
+    // navigation.navigate('Profile', { profile: profilesData[currentIndex] });
   };
 
   useEffect(() => {

@@ -1,11 +1,11 @@
-import React from "react";
-import { Button, StyleSheet, Text, View } from "react-native";
+import React from 'react';
+import { Button, StyleSheet, Text, View } from 'react-native';
 
 export const EmptyProfileView = ({ titleReload, onReload }) => {
   return (
     <View style={styles.container}>
       <Text style={styles.emptyText}>There are no new profiles</Text>
-      <Button title={titleReload} onPress={onReload} />
+      {/* <Button title={titleReload} onPress={onReload} /> */}
     </View>
   );
 };
@@ -13,11 +13,11 @@ export const EmptyProfileView = ({ titleReload, onReload }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   emptyText: {
     fontSize: 18,
-    color: "gray",
+    color: 'gray',
   },
 });

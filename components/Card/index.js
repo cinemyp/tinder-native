@@ -2,15 +2,19 @@ import React from 'react';
 import { Platform, StyleSheet } from 'react-native';
 import { Tile } from 'react-native-elements';
 import Layout from '../../constants/Layout';
+import { getUserAge } from '../../utils/date';
 
 const BOTTOM_BAR_HEIGHT = !Platform.isPad ? 29 : 49;
 
 export const Card = ({
   name,
   avatarUrl,
+  birthdayDate,
   caption = '16 miles away',
   onPressCard,
 }) => {
+  const age = getUserAge(birthdayDate?.seconds ?? 0);
+
   return (
     <Tile
       imageSrc={{
@@ -19,7 +23,7 @@ export const Card = ({
       imageContainerStyle={styles.imageContainer}
       title={name}
       titleStyle={styles.title}
-      caption={caption}
+      caption={`${age} years old`}
       captionStyle={styles.caption}
       activeOpacity={0.9}
       containerStyle={styles.container}

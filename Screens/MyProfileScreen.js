@@ -19,7 +19,6 @@ export default function MyProfileScreen({
 }) {
   const { currentUser } = useStoreon('currentUser');
   const { name, birthdayDate } = currentUser;
-  const [loading, setLoading] = React.useState(false);
   const age = getUserAge(birthdayDate?.seconds ?? 0);
 
   const handlePressLogout = () => {
@@ -29,19 +28,6 @@ export default function MyProfileScreen({
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.imageContainer}>
-        {/* <Image
-          style={styles.avatar}
-          source={{
-            uri: currentUser.avatarUrl,
-          }}
-          onLoadStart={() => {
-            setLoading(true);
-          }}
-          onLoadEnd={() => {
-            setLoading(false);
-          }}
-        />
-        {loading && <LoadingView />} */}
         <LazyImage
           thumbnailSource={{ uri: currentUser.thumbnailUrl }}
           source={{ uri: currentUser.avatarUrl }}
@@ -53,7 +39,7 @@ export default function MyProfileScreen({
         {name}, {age}
       </Text>
       <View style={styles.buttons}>
-        <Button
+        {/*  <Button
           icon={<Ionicons name={'settings'} size={42} color={'#4E4E4E'} />}
           iconPosition={'top'}
           title={'settings'.toUpperCase()}
@@ -68,7 +54,7 @@ export default function MyProfileScreen({
           titleStyle={{ color: '#5e5e5e', fontSize: 12 }}
           type={'clear'}
           onPress={onPressEdit}
-        />
+        />*/}
       </View>
       <Button
         title={'Log out'}

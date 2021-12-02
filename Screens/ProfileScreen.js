@@ -2,7 +2,6 @@ import React from 'react';
 import { Image, SafeAreaView, StyleSheet, View } from 'react-native';
 import { Divider, Icon, Text } from 'react-native-elements';
 import UserApi from '../api/UserApi';
-import LoadingView from '../components/LoadingView';
 import Layout from '../constants/Layout';
 
 const Social = ({ name }) => (
@@ -20,7 +19,6 @@ export const ProfileScreen = ({
 }) => {
   const [profileData, setProfileData] = React.useState(null);
   const { profile } = route.params;
-
   React.useEffect(() => {
     if (!profile.avatarUrl) {
       UserApi.getUserById(profile._id).then((user) => {
