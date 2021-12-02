@@ -89,4 +89,29 @@ const messagesHandler = (dialog, setMessages) => {
     });
 };
 
-export default { createNewDialogs, sendMessage, messagesHandler };
+const dialogListener = (setDialogs, loading, setLoading) => {
+  const { currentUser } = auth;
+  const { uid } = currentUser;
+  return firestore
+    .collection('dialogs')
+    .doc(uid)
+    .collection('userDialogs')
+    .onSnapshot((querySnapshot) => {
+      const dialogs = querySnapshot.docs.map((documentSnapshot) => ({
+        _id: documentSnapshot.id,
+        ...documentSnapshot.data(),
+      }));
+      setDialogs(dialogs);
+
+      if (loading) {
+        setLoading(false);
+      }
+    });
+};
+
+export default {
+  createNewDialogs,
+  sendMessage,
+  messagesHandler,
+  dialogListener,
+};

@@ -10,6 +10,7 @@ import Layout from '../constants/Layout';
 import { getUserAge } from '../utils/date';
 import LoadingView from '../components/LoadingView';
 import AuthApi from '../api/AuthApi';
+import { LazyImage } from '../components/LazyImage';
 
 export default function MyProfileScreen({
   onPressSettings,
@@ -19,7 +20,6 @@ export default function MyProfileScreen({
   const { currentUser } = useStoreon('currentUser');
   const { name, birthdayDate } = currentUser;
   const [loading, setLoading] = React.useState(false);
-
   const age = getUserAge(birthdayDate?.seconds ?? 0);
 
   const handlePressLogout = () => {
@@ -29,7 +29,7 @@ export default function MyProfileScreen({
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.imageContainer}>
-        <Image
+        {/* <Image
           style={styles.avatar}
           source={{
             uri: currentUser.avatarUrl,
@@ -41,7 +41,13 @@ export default function MyProfileScreen({
             setLoading(false);
           }}
         />
-        {loading && <LoadingView />}
+        {loading && <LoadingView />} */}
+        <LazyImage
+          thumbnailSource={{ uri: currentUser.thumbnailUrl }}
+          source={{ uri: currentUser.avatarUrl }}
+          style={{ width: 250, height: 250, borderRadius: 125 }}
+          resizeMode={'cover'}
+        />
       </View>
       <Text h2 style={styles.name}>
         {name}, {age}

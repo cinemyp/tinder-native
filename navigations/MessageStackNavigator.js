@@ -9,7 +9,7 @@ import HomeTabs from './HomeTabs';
 
 const Stack = createStackNavigator();
 
-export default MessageStackNavigator = () => {
+const MessageStackNavigator = () => {
   //TODO: получаем из стора данные о диалоге
   const name = 'Amelia';
 
@@ -47,3 +47,4 @@ export default MessageStackNavigator = () => {
     </Stack.Navigator>
   );
 };
+export default MessageStackNavigator;

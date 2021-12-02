@@ -8,7 +8,7 @@ import { PRIMARY_COLOR } from '../constants/colors';
 
 const Tab = createBottomTabNavigator();
 
-export default HomeTabs = () => {
+const HomeTabs = () => {
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
@@ -44,3 +44,4 @@ export default HomeTabs = () => {
     </Tab.Navigator>
   );
 };
+export default HomeTabs;

@@ -1,5 +1,5 @@
 import { Alert } from 'react-native';
-import { auth, firestore, firebase } from '../../firebase';
+import { firestore } from '../../firebase';
 
 const getGenders = async () => {
   try {

@@ -22,20 +22,40 @@ export const user = (store) => {
           store.dispatch('user/save', { ...currentUser, status: false });
         }
       })
-      .then((data) =>
-        ImagesApi.getAvatarImage(data.id, data.avatarId).then((snapshot) => {
+      .then(async (data) => {
+        const newData = await ImagesApi.getAvatarImage(
+          data.id,
+          data.avatarId
+        ).then((snapshot) => {
+          if (snapshot.exists) {
+            const { downloadURL } = snapshot.data();
+            const newData = { ...data, avatarUrl: downloadURL };
+            store.dispatch('user/save', data);
+            return newData;
+          } else {
+            console.log('Image has not been found. ID is ', data.avatarId);
+            store.dispatch('user/save', { ...data, status: false });
+          }
+        });
+        return newData;
+      })
+      .then((data) => {
+        ImagesApi.getAvatarImage(data.id, data.thumbnailId).then((snapshot) => {
           if (snapshot.exists) {
             const { downloadURL } = snapshot.data();
 
             store.dispatch('user/save', {
               ...data,
-              avatarUrl: downloadURL,
+              thumbnailUrl: downloadURL,
             });
           } else {
-            console.log('Image has not been found. ID is ', data.avatarId);
+            console.log('Image has not been found. ID is ', data.thumbnailId);
             store.dispatch('user/save', { ...data, status: false });
           }
-        })
-      );
+        });
+      })
+      .catch((error) => {
+        console.log('Error in store: ' + error);
+      });
   });
 };

@@ -1,5 +1,5 @@
 import { Alert } from 'react-native';
-import { auth, firestore, firebase } from '../../firebase';
+import { firestore, firebase } from '../../firebase';
 
 const getAvatarImage = async (userId, avatarId) => {
   return firestore

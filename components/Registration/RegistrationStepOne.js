@@ -13,7 +13,6 @@ export const RegistrationStepOne = ({ setState, next, values, styles }) => {
           onChangeText={(text) =>
             setState((prevState) => ({ ...prevState, email: text }))
           }
-          onSubmitEditing={() => this.nameInput.focus()}
           keyboardType={'email-address'}
           autoCompleteType={'email'}
           autoCapitalize={'none'}
@@ -23,20 +22,17 @@ export const RegistrationStepOne = ({ setState, next, values, styles }) => {
         />
         <TextInput
           placeholder={'Name'}
-          ref={(input) => (this.nameInput = input)}
           style={styles['input']}
           value={values.name}
           onChangeText={(text) =>
             setState((prevState) => ({ ...prevState, name: text }))
           }
-          onSubmitEditing={() => this.passwordInput.focus()}
           autoCorrect={false}
           returnKeyType={'next'}
           textContentType={'username'}
         />
         <TextInput
           placeholder={'Password'}
-          ref={(input) => (this.passwordInput = input)}
           style={styles['input']}
           value={values.password}
           onChangeText={(text) =>

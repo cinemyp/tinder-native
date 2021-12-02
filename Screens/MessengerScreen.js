@@ -2,9 +2,9 @@ import { StatusBar } from 'expo-status-bar';
 import React, { useEffect, useState } from 'react';
 import { ScrollView, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import ChatApi from '../api/ChatApi';
 import { Dialog } from '../components/Dialog/Dialog';
 import { EmptyMessengerView } from '../components/EmptyViews/EmptyMessengerView';
-import { auth, firestore } from '../firebase';
 
 const LATEST_MESSAGE_DEFAULT = 'New Dialog';
 
@@ -13,22 +13,7 @@ export default function MessengerScreen({ navigation }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const { uid } = auth.currentUser;
-    const unsubscribe = firestore
-      .collection('dialogs')
-      .doc(uid)
-      .collection('userDialogs')
-      .onSnapshot((querySnapshot) => {
-        const dialogs = querySnapshot.docs.map((documentSnapshot) => ({
-          _id: documentSnapshot.id,
-          ...documentSnapshot.data(),
-        }));
-        setDialogs(dialogs);
-
-        if (loading) {
-          setLoading(false);
-        }
-      });
+    const unsubscribe = ChatApi.dialogListener(setDialogs, loading, setLoading);
     return () => unsubscribe();
   }, []);
 

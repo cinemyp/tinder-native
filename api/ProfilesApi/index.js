@@ -1,5 +1,5 @@
 import { Alert } from 'react-native';
-import { auth, firestore, firebase } from '../../firebase';
+import { auth, firestore } from '../../firebase';
 import LikeApi from '../LikeApi';
 
 const getProfiles = async (currentUser) => {

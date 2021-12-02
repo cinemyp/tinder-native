@@ -33,7 +33,6 @@ export const LoginScreen = ({ navigation }) => {
           style={styles['input']}
           value={email}
           onChangeText={(text) => setEmail(text)}
-          onSubmitEditing={() => this.passwordInput.focus()}
           keyboardType={'email-address'}
           autoCompleteType={'email'}
           autoCapitalize={'none'}
@@ -42,7 +41,6 @@ export const LoginScreen = ({ navigation }) => {
         />
         <TextInput
           placeholder={'Password'}
-          ref={(input) => (this.passwordInput = input)}
           style={styles['input']}
           value={password}
           onChangeText={(text) => setPassword(text)}

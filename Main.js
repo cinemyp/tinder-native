@@ -5,7 +5,7 @@ import { Text, View } from 'react-native';
 import LoginRegStackNavigator from './navigations/LoginRegStackNavigator';
 import { useStoreon } from 'storeon/react';
 
-export default Main = () => {
+const Main = () => {
   const [state, setState] = useState({ loaded: false });
   const { authState } = useStoreon('authState');
 
@@ -41,3 +41,5 @@ export default Main = () => {
   }
   return <MessageStackNavigator />;
 };
+
+export default Main;
