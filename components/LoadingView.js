@@ -1,11 +1,13 @@
 import React from 'react';
 import { ActivityIndicator, StyleSheet, View } from 'react-native';
 
-const LoadingView = () => {
+const LoadingView = ({ show = false }) => {
   return (
-    <View style={styles.container}>
-      <ActivityIndicator size={'large'} />
-    </View>
+    show && (
+      <View style={styles.container}>
+        <ActivityIndicator size={'large'} />
+      </View>
+    )
   );
 };
 

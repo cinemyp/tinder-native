@@ -25,31 +25,38 @@ export const user = (store) => {
       .then(async (data) => {
         const newData = await ImagesApi.getAvatarImage(
           data.id,
-          data.avatarId
+          data.thumbnailId
         ).then((snapshot) => {
           if (snapshot.exists) {
             const { downloadURL } = snapshot.data();
-            const newData = { ...data, avatarUrl: downloadURL };
+            const newData = { ...data, thumbnailUrl: downloadURL };
             store.dispatch('user/save', data);
             return newData;
           } else {
-            console.log('Image has not been found. ID is ', data.avatarId);
+            console.log(
+              'Thumb Image has not been found. ID is ',
+              data.thumbnailId
+            );
             store.dispatch('user/save', { ...data, status: false });
+            return data;
           }
         });
         return newData;
       })
       .then((data) => {
-        ImagesApi.getAvatarImage(data.id, data.thumbnailId).then((snapshot) => {
+        ImagesApi.getAvatarImage(data.id, data.avatarId).then((snapshot) => {
           if (snapshot.exists) {
             const { downloadURL } = snapshot.data();
 
             store.dispatch('user/save', {
               ...data,
-              thumbnailUrl: downloadURL,
+              avatarUrl: downloadURL,
             });
           } else {
-            console.log('Image has not been found. ID is ', data.thumbnailId);
+            console.log(
+              'Avatar Image has not been found. ID is ',
+              data.avatarId
+            );
             store.dispatch('user/save', { ...data, status: false });
           }
         });
