@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useStoreon } from 'storeon/react';
 import { getUserAge } from '../utils/date';
 import AuthApi from '../api/AuthApi';
@@ -51,22 +51,13 @@ export default function MyProfileScreen({ navigation }) {
     setLoading(false);
   };
 
-  useEffect(() => {
-    console.log('thumb', currentUser.thumbnailUrl);
-    console.log('avatar', currentUser.avatarUrl);
-  }, [currentUser]);
-
   return (
     <SafeAreaView style={styles.container}>
       <LoadingView show={loading} />
       <View style={styles.imageContainer}>
         <LazyImage
-          thumbnailSource={{
-            uri: 'https://firebasestorage.googleapis.com/v0/b/tinder-native-5420b.appspot.com/o/images%2FMYhSA2AHqNg22876k4BeO5FWklF2%2F%40thumb_0.frgcobufxr?alt=media&token=a24d2afe-4f93-4683-ab86-7601eae3742d',
-          }}
-          source={{
-            uri: 'https://firebasestorage.googleapis.com/v0/b/tinder-native-5420b.appspot.com/o/images%2FMYhSA2AHqNg22876k4BeO5FWklF2%2F0.frgcobufxr?alt=media&token=1d405e3f-8aaf-4b68-964d-b282734ed34d',
-          }}
+          thumbnailSource={{ uri: currentUser.thumbnailUrl }}
+          source={{ uri: currentUser.avatarUrl }}
           style={{ width: 250, height: 250, borderRadius: 125 }}
           resizeMode={'cover'}
         />

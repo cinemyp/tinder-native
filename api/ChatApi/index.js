@@ -9,14 +9,22 @@ const createNewDialogs = async (uid, userToDialogId) => {
     const userData = getUserToDialog(user);
     const userToDialogData = getUserToDialog(userToDialog);
 
-    await createNewDialog(uid, userToDialogData);
-    await createNewDialog(userToDialogId, userData);
+    const dialog = await createNewDialog(uid, userToDialogData);
+    await createNewDialog(userToDialogId, userData, dialog.id);
   } catch (error) {
     console.log('Error: create new dialogs ' + error);
   }
 };
 
-const createNewDialog = async (uid, userToDialog) => {
+const createNewDialog = async (uid, userToDialog, dialogId = null) => {
+  if (dialogId) {
+    return firestore
+      .collection('dialogs')
+      .doc(uid)
+      .collection('userDialogs')
+      .doc(dialogId)
+      .set(dialog(userToDialog));
+  }
   return firestore
     .collection('dialogs')
     .doc(uid)
@@ -29,12 +37,12 @@ const dialog = (user) => {
 };
 
 const getUserToDialog = (doc) => {
-  const data = doc.data();
-  return { _id: doc.id, name: data.name, avatarId: data.avatarId };
+  return { _id: doc._id, name: doc.name, avatarId: doc.avatarId };
 };
 
 const sendMessage = (text, dialog, currentUser) => {
   const { uid } = auth.currentUser;
+  console.log(dialog);
   firestore
     .collection('dialogs')
     .doc(uid)
@@ -53,7 +61,29 @@ const sendMessage = (text, dialog, currentUser) => {
 
   firestore
     .collection('dialogs')
+    .doc(dialog.participant._id)
+    .collection('userDialogs')
+    .doc(dialog._id)
+    .collection('messages')
+    .add({
+      text,
+      createdAt: Date.now(),
+      participant: {
+        _id: currentUser.id,
+        name: currentUser.name,
+        avatarId: currentUser.avatarId,
+      },
+    });
+
+  firestore
+    .collection('dialogs')
     .doc(uid)
+    .collection('userDialogs')
+    .doc(dialog._id)
+    .set({ latestMessage: { text, createdAt: Date.now() } }, { merge: true });
+  firestore
+    .collection('dialogs')
+    .doc(dialog.participant._id)
     .collection('userDialogs')
     .doc(dialog._id)
     .set({ latestMessage: { text, createdAt: Date.now() } }, { merge: true });
@@ -79,8 +109,8 @@ const messagesHandler = (dialog, setMessages) => {
           ...firebaseData,
         };
         if (!firebaseData.system) {
-          data.participant = {
-            ...firebaseData.user,
+          data.user = {
+            ...firebaseData.participant,
           };
         }
         return data;
