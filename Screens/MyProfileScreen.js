@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useStoreon } from 'storeon/react';
 import { getUserAge } from '../utils/date';
 import AuthApi from '../api/AuthApi';
@@ -50,6 +50,14 @@ export default function MyProfileScreen({ navigation }) {
     dispatch('user/get');
     setLoading(false);
   };
+
+  useEffect(() => {
+    if (currentUser.name) return;
+    setLoading(true);
+
+    dispatch('user/get');
+    setLoading(false);
+  }, []);
 
   return (
     <SafeAreaView style={styles.container}>

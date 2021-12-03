@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import {
   Alert,
   KeyboardAvoidingView,
@@ -10,6 +10,7 @@ import {
 import { Button, Text } from 'react-native-elements';
 import { useStoreon } from 'storeon/react';
 import authApi from '../api/AuthApi';
+import { isIosPlatform } from '../constants';
 
 export const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState('');
@@ -26,7 +27,10 @@ export const LoginScreen = ({ navigation }) => {
   };
 
   return (
-    <KeyboardAvoidingView style={styles['container']} behavior={'padding'}>
+    <KeyboardAvoidingView
+      style={styles['container']}
+      behavior={isIosPlatform() ? 'padding' : 'height'}
+    >
       <View style={styles['inputContainer']}>
         <TextInput
           placeholder={'Email'}
@@ -44,16 +48,15 @@ export const LoginScreen = ({ navigation }) => {
           style={styles['input']}
           value={password}
           onChangeText={(text) => setPassword(text)}
-          keyboardType={'visible-password'}
           autoCompleteType={'password'}
           returnKeyType={'go'}
-          secureTextEntry
+          secureTextEntry={true}
         />
       </View>
       <View style={styles['buttonContainer']}>
         <Button
           title={'Login'}
-          buttonStyle={styles['button']}
+          containerStyle={styles['button']}
           onPress={handlePressLogin}
         />
         <Text style={styles['registerText']}>You don't have an account?</Text>
@@ -90,9 +93,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: 80,
   },
-  button: {
-    width: '100%',
-  },
+  button: { width: '100%' },
   registerText: {
     marginTop: 15,
     color: '#a5a5a5',

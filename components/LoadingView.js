@@ -5,7 +5,7 @@ const LoadingView = ({ show = false }) => {
   return (
     show && (
       <View style={styles.container}>
-        <ActivityIndicator size={'large'} />
+        <ActivityIndicator size={'large'} color={'#999999'} />
       </View>
     )
   );
@@ -21,6 +21,7 @@ const styles = StyleSheet.create({
     opacity: 0.7,
     justifyContent: 'center',
     alignItems: 'center',
+    zIndex: 100,
   },
 });
 export default LoadingView;
