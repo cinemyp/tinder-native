@@ -138,7 +138,7 @@ const dialogListener = (setDialogs, loading, setLoading) => {
         dialogs.map(async (item) => {
           const avatar = await ImagesApi.getAvatarImage(
             item.participant._id,
-            item.participant.avatarId
+            item.participant.thumbnailId
           );
           const { downloadURL } = avatar.data();
           return {
