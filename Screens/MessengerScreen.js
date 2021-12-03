@@ -23,7 +23,7 @@ export default function MessengerScreen({ navigation }) {
     navigation.navigate('Dialog', { dialog: item });
   };
   const handlePressAvatarDialog = (participant) => {
-    navigation.navigate('Profile', { profile: participant });
+    // navigation.navigate('Profile', { profile: participant });
   };
 
   if (dialogs.length === 0) return <EmptyMessengerView />;

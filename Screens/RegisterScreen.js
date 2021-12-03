@@ -7,6 +7,7 @@ import { RegistrationStepThree } from '../components/Registration/RegistrationSt
 import { RegistrationStepTwo } from '../components/Registration/RegistrationStepTwo';
 import { RegistrationStepFour } from '../components/Registration/RegistrationStepFour';
 import { PRIMARY_COLOR } from '../constants/colors';
+import { getUserAge } from '../utils/date';
 
 const defaultState = {
   email: '',
@@ -37,7 +38,15 @@ export const RegisterScreen = () => {
         }
         break;
       case 1:
-        //TODO: проверка на совершеннолетие
+        const yearsOld = getUserAge(state.date.getTime() / 1000);
+        if (yearsOld < 18) {
+          Alert.alert(
+            'Error during registration',
+            'You are under the age of 18'
+          );
+
+          return;
+        }
         break;
       case 2:
         break;
