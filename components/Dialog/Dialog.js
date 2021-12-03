@@ -1,6 +1,7 @@
 import React from 'react';
 import { StyleSheet } from 'react-native';
 import { Avatar, ListItem } from 'react-native-elements';
+import ImagesApi from '../../api/ImagesApi';
 
 export const Dialog = ({
   avatar,
@@ -18,10 +19,13 @@ export const Dialog = ({
   if (avatar) {
     avatarProps.source = { uri: avatar };
   }
-
   return (
     <ListItem bottomDivider onPress={onPressDialog}>
-      <Avatar {...avatarProps} titleStyle={styles.placeholder} />
+      <Avatar
+        {...avatarProps}
+        avatarStyle={styles['avatar']}
+        titleStyle={styles['titleStyle']}
+      />
       <ListItem.Content>
         <ListItem.Title style={styles.title}>{name}</ListItem.Title>
         <ListItem.Subtitle style={styles.subtitle}>{message}</ListItem.Subtitle>
@@ -32,15 +36,11 @@ export const Dialog = ({
 };
 
 const styles = StyleSheet.create({
-  placeholder: {
+  titleStyle: {
     color: 'whitesmoke',
-    backgroundColor: '#a5a5a5',
-    flex: 1,
-    alignItems: 'center',
-    alignSelf: 'center',
-    justifyContent: 'center',
-    width: '100%',
-    height: '100%',
+  },
+  avatar: {
+    zIndex: -1,
   },
   title: {
     fontSize: 24,

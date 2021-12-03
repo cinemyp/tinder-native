@@ -2,7 +2,9 @@ import { StatusBar } from 'expo-status-bar';
 import React, { useEffect, useState } from 'react';
 import { ScrollView, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useStoreon } from 'storeon/react';
 import ChatApi from '../api/ChatApi';
+import ImagesApi from '../api/ImagesApi';
 import { Dialog } from '../components/Dialog/Dialog';
 import { EmptyMessengerView } from '../components/EmptyViews/EmptyMessengerView';
 
@@ -29,20 +31,22 @@ export default function MessengerScreen({ navigation }) {
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView style={styles.fullHeight}>
-        {dialogs.map(({ _id, latestMessage, participant }) => (
-          <Dialog
-            key={_id}
-            avatar={''}
-            name={participant.name}
-            message={
-              latestMessage ? latestMessage.text : LATEST_MESSAGE_DEFAULT
-            }
-            onPressDialog={() =>
-              handlePressDialog({ _id, latestMessage, participant })
-            }
-            onPressAvatarDialog={() => handlePressAvatarDialog(participant)}
-          />
-        ))}
+        {dialogs.map(({ _id, latestMessage, participant }) => {
+          return (
+            <Dialog
+              key={_id}
+              name={participant.name}
+              message={
+                latestMessage ? latestMessage.text : LATEST_MESSAGE_DEFAULT
+              }
+              onPressDialog={() =>
+                handlePressDialog({ _id, latestMessage, participant })
+              }
+              onPressAvatarDialog={() => handlePressAvatarDialog(participant)}
+              avatar={participant?.thumbnailUrl}
+            />
+          );
+        })}
       </ScrollView>
       <StatusBar style="auto" />
     </SafeAreaView>

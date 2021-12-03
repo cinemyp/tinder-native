@@ -1,4 +1,5 @@
 import { auth, firestore, firebase } from '../../firebase';
+import ImagesApi from '../ImagesApi';
 import UserApi from '../UserApi';
 
 const createNewDialogs = async (uid, userToDialogId) => {
@@ -37,12 +38,11 @@ const dialog = (user) => {
 };
 
 const getUserToDialog = (doc) => {
-  return { _id: doc._id, name: doc.name, avatarId: doc.avatarId };
+  return { _id: doc._id, name: doc.name, thumbnailId: doc.thumbnailId };
 };
 
 const sendMessage = (text, dialog, currentUser) => {
   const { uid } = auth.currentUser;
-  console.log(dialog);
   firestore
     .collection('dialogs')
     .doc(uid)
@@ -55,7 +55,7 @@ const sendMessage = (text, dialog, currentUser) => {
       participant: {
         _id: currentUser.id,
         name: currentUser.name,
-        avatarId: currentUser.avatarId,
+        thumbnailId: currentUser.thumbnailId,
       },
     });
 
@@ -71,7 +71,7 @@ const sendMessage = (text, dialog, currentUser) => {
       participant: {
         _id: currentUser.id,
         name: currentUser.name,
-        avatarId: currentUser.avatarId,
+        thumbnailId: currentUser.thumbnailId,
       },
     });
 
@@ -111,6 +111,7 @@ const messagesHandler = (dialog, setMessages) => {
         if (!firebaseData.system) {
           data.user = {
             ...firebaseData.participant,
+            avatar: dialog.participant.thumbnailUrl,
           };
         }
         return data;
@@ -126,12 +127,27 @@ const dialogListener = (setDialogs, loading, setLoading) => {
     .collection('dialogs')
     .doc(uid)
     .collection('userDialogs')
-    .onSnapshot((querySnapshot) => {
+    .onSnapshot(async (querySnapshot) => {
       const dialogs = querySnapshot.docs.map((documentSnapshot) => ({
         _id: documentSnapshot.id,
         ...documentSnapshot.data(),
       }));
       setDialogs(dialogs);
+
+      const result = await Promise.all(
+        dialogs.map(async (item) => {
+          const avatar = await ImagesApi.getAvatarImage(
+            item.participant._id,
+            item.participant.avatarId
+          );
+          const { downloadURL } = avatar.data();
+          return {
+            ...item,
+            participant: { ...item.participant, thumbnailUrl: downloadURL },
+          };
+        })
+      );
+      setDialogs(result);
 
       if (loading) {
         setLoading(false);
