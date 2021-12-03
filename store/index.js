@@ -1,3 +1,10 @@
 import { user } from './user';
 
-export const storeonParams = [user];
+const authState = (store) => {
+  store.on('@init', () => ({ authState: { registration: false } }));
+  store.on('auth/update', ({ authState }, value) => ({
+    authState: { ...value },
+  }));
+};
+
+export const storeonParams = [user, authState];

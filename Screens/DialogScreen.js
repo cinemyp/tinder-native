@@ -1,28 +1,35 @@
-import React, { useCallback, useEffect, useState } from "react";
-import { StyleSheet, View } from "react-native";
-import { Bubble, GiftedChat } from "react-native-gifted-chat";
-import { getBottomSpace } from "react-native-iphone-x-helper";
-import { EmptyChatView } from "../components/EmptyViews/EmptyChatView";
+import React, { useCallback, useEffect, useState } from 'react';
+import { StyleSheet } from 'react-native';
+import { Bubble, GiftedChat } from 'react-native-gifted-chat';
+import { getBottomSpace } from 'react-native-iphone-x-helper';
+import { EmptyChatView } from '../components/EmptyViews/EmptyChatView';
+import { PRIMARY_COLOR } from '../constants/colors';
+import { useStoreon } from 'storeon/react';
+import ChatApi from '../api/ChatApi';
 
-export default DialogScreen = () => {
+const DialogScreen = ({ route }) => {
   const [messages, setMessages] = useState([]);
 
-  useEffect(() => {
-    setMessages([]);
+  const { dialog } = route.params;
+  const { currentUser } = useStoreon('currentUser');
+
+  const handleSend = useCallback((messages = []) => {
+    const text = messages[0].text;
+
+    ChatApi.sendMessage(text, dialog, currentUser);
   }, []);
 
-  const onSend = useCallback((messages = []) => {
-    setMessages((previousMessages) =>
-      GiftedChat.append(previousMessages, messages)
-    );
+  useEffect(() => {
+    const messageListener = ChatApi.messagesHandler(dialog, setMessages);
+    return () => messageListener();
   }, []);
 
   return (
     <GiftedChat
       messages={messages}
-      onSend={(messages) => onSend(messages)}
+      onSend={(messages) => handleSend(messages)}
       user={{
-        _id: 1,
+        _id: currentUser.id,
       }}
       messagesContainerStyle={styles.messagesContainer}
       renderBubble={(props) => {
@@ -30,21 +37,21 @@ export default DialogScreen = () => {
           <Bubble
             {...props}
             wrapperStyle={{
-              right: { backgroundColor: "#fcb9b8" },
-              left: { backgroundColor: "#eee" },
+              right: { backgroundColor: PRIMARY_COLOR },
+              left: { backgroundColor: '#eee' },
             }}
           />
         );
       }}
       renderChatEmpty={EmptyChatView}
       inverted={true}
-      alwaysShowSend
       bottomOffset={getBottomSpace()}
     />
   );
 };
 const styles = StyleSheet.create({
   messagesContainer: {
-    backgroundColor: "#fff",
+    backgroundColor: '#fff',
   },
 });
+export default DialogScreen;

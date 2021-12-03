@@ -1,20 +1,29 @@
-import React from "react";
-import { Platform, StyleSheet } from "react-native";
-import { Tile } from "react-native-elements";
-import Layout from "../../constants/Layout";
+import React from 'react';
+import { Platform, StyleSheet } from 'react-native';
+import { Tile } from 'react-native-elements';
+import Layout from '../../constants/Layout';
+import { getUserAge } from '../../utils/date';
 
 const BOTTOM_BAR_HEIGHT = !Platform.isPad ? 29 : 49;
 
-export const Card = ({ pic, title, caption, onPressCard }) => {
+export const Card = ({
+  name,
+  avatarUrl,
+  birthdayDate,
+  caption = '16 miles away',
+  onPressCard,
+}) => {
+  const age = getUserAge(birthdayDate?.seconds ?? 0);
+
   return (
     <Tile
       imageSrc={{
-        uri: pic,
+        uri: avatarUrl,
       }}
       imageContainerStyle={styles.imageContainer}
-      title={title}
+      title={name}
       titleStyle={styles.title}
-      caption={caption}
+      caption={`${age} years old`}
       captionStyle={styles.caption}
       activeOpacity={0.9}
       containerStyle={styles.container}
@@ -27,28 +36,28 @@ export const Card = ({ pic, title, caption, onPressCard }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: "center",
+    alignItems: 'center',
   },
   imageContainer: {
     width: Layout.window.width - 30,
     height: Layout.window.height - BOTTOM_BAR_HEIGHT * 6,
     borderRadius: 20,
-    overflow: "hidden", // this does magic
+    overflow: 'hidden', // this does magic
     shadowOffset: { width: 0, height: 5 },
-    shadowColor: "#000",
+    shadowColor: '#000',
     shadowOpacity: 0.8,
     shadowRadius: 10,
     borderWidth: 1,
-    borderColor: "white",
+    borderColor: 'white',
   },
   title: {
-    position: "absolute",
+    position: 'absolute',
     left: 10,
     bottom: 30,
     fontSize: 34,
   },
   caption: {
-    position: "absolute",
+    position: 'absolute',
     left: 10,
     bottom: 10,
     fontSize: 20,

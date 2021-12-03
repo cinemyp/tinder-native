@@ -1,39 +1,56 @@
 import React, { useState } from 'react';
-import {
-  KeyboardAvoidingView,
-  StyleSheet,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from 'react-native';
-import { Button, Text } from 'react-native-elements';
+import { Alert, KeyboardAvoidingView, StyleSheet } from 'react-native';
+import { useStoreon } from 'storeon/react';
+import AuthApi from '../api/AuthApi';
 import { RegistrationStepOne } from '../components/Registration/RegistrationStepOne';
+import { RegistrationStepThree } from '../components/Registration/RegistrationStepThree';
 import { RegistrationStepTwo } from '../components/Registration/RegistrationStepTwo';
-import { auth, firestore, firebase } from '../firebase';
+import { RegistrationStepFour } from '../components/Registration/RegistrationStepFour';
+import { PRIMARY_COLOR } from '../constants/colors';
+import { getUserAge } from '../utils/date';
 
 const defaultState = {
   email: '',
   password: '',
   name: '',
   imageUri: '',
+  thumbnailUri: '',
+  genderId: '',
+  date: new Date(),
 };
+
+const INITIAL_STEP = 0;
+const MAX_STEPS = 3;
 
 export const RegisterScreen = () => {
   const [state, setState] = useState(defaultState);
-  const [step, setStep] = useState(0);
-
-  const maxSteps = 2;
+  const [step, setStep] = useState(INITIAL_STEP);
+  const [progressLoading, setProgressLoading] = useState(0);
+  const { dispatch } = useStoreon('authState');
 
   const nextStep = () => {
     switch (step) {
       case 0:
         if (!state.email || !state.password || !state.name) {
-          //TODO: вернуть ошибку, напистаь, что нужно заполнить все поля
           //TODO: проверка полей
+          Alert.alert('Error during registration', 'Fill in all the fields');
           return;
         }
         break;
       case 1:
+        const yearsOld = getUserAge(state.date.getTime() / 1000);
+        if (yearsOld < 18) {
+          Alert.alert(
+            'Error during registration',
+            'You are under the age of 18'
+          );
+
+          return;
+        }
+        break;
+      case 2:
+        break;
+      case 3:
         if (!state.imageUri) {
           return;
         }
@@ -67,57 +84,31 @@ export const RegisterScreen = () => {
         />
       ),
     },
+    {
+      component: (
+        <RegistrationStepThree
+          setState={setState}
+          next={nextStep}
+          values={state}
+          styles={styles}
+        />
+      ),
+    },
+    {
+      component: (
+        <RegistrationStepFour
+          setState={setState}
+          next={nextStep}
+          values={state}
+          styles={styles}
+          progressLoading={progressLoading}
+        />
+      ),
+    },
   ];
 
   const handlePressRegister = () => {
-    const { email, password, name } = state;
-
-    auth
-      .createUserWithEmailAndPassword(email, password)
-      .then((userCredentials) => {
-        const { uid } = auth.currentUser;
-        firestore.collection('users').doc(uid).set({ name, email });
-      })
-      .then(() => fetch(state.imageUri))
-      .then((response) => response.blob())
-      .then((blob) => {
-        const childPath = `images/${
-          auth.currentUser.uid
-        }/${Math.random().toString(36)}`;
-
-        const task = firebase.storage().ref().child(childPath).put(blob);
-
-        const taskProgress = (snapshot) => {
-          console.log(`transferred: ${snapshot.bytesTransferred}`);
-          //TODO: прогресс бар
-        };
-
-        const taskCompleted = () => {
-          task.snapshot.ref.getDownloadURL().then((snapshot) => {
-            saveProfileData(snapshot);
-            console.log(snapshot);
-          });
-        };
-
-        const taskError = (snapshot) => {
-          console.log(snapshot);
-        };
-
-        task.on('state_changed', taskProgress, taskError, taskCompleted);
-      })
-      .catch((error) => {
-        alert(error.message);
-        console.log(error.message);
-      });
-  };
-
-  const saveProfileData = (data) => {
-    const { uid } = auth.currentUser;
-    //TODO: заменить на апи метод
-    firestore.collection('images').doc(uid).collection('userImages').add({
-      downloadURL: data,
-      uploaded: firebase.firestore.FieldValue.serverTimestamp(),
-    });
+    AuthApi.signOn(state, dispatch, setProgressLoading);
   };
 
   return (
@@ -135,6 +126,9 @@ const styles = StyleSheet.create({
   },
   inputContainer: {
     width: '80%',
+  },
+  dateContainer: {
+    width: '100%',
   },
   input: {
     backgroundColor: '#fff',
@@ -182,5 +176,26 @@ const styles = StyleSheet.create({
     zIndex: 99,
     right: -20,
     top: -20,
+  },
+  addPhotoBtn: {
+    position: 'absolute',
+    zIndex: 99,
+  },
+  gender_btnContainer: {
+    justifyContent: 'center',
+    marginBottom: 50,
+  },
+  gender_button: {
+    marginTop: 50,
+    width: 150,
+    backgroundColor: PRIMARY_COLOR,
+    borderWidth: 1,
+    borderColor: 'black',
+  },
+  gender_button__nonselected: {
+    marginTop: 50,
+    width: 150,
+    backgroundColor: PRIMARY_COLOR + '95',
+    borderWidth: 0,
   },
 });

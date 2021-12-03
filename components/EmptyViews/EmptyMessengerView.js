@@ -1,11 +1,10 @@
 import React from 'react';
 import { Button, StyleSheet, Text, View } from 'react-native';
 
-export const EmptyProfileView = ({ titleReload, onReload }) => {
+export const EmptyMessengerView = ({}) => {
   return (
     <View style={styles.container}>
-      <Text style={styles.emptyText}>There are no new profiles</Text>
-      {/* <Button title={titleReload} onPress={onReload} /> */}
+      <Text style={styles.emptyText}>There are no dialogs</Text>
     </View>
   );
 };

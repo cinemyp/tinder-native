@@ -8,7 +8,7 @@ import HomeTabs from './HomeTabs';
 
 const Stack = createStackNavigator();
 
-export default LoginRegStackNavigator = () => {
+const LoginRegStackNavigator = () => {
   return (
     <Stack.Navigator>
       <Stack.Screen
@@ -20,3 +20,5 @@ export default LoginRegStackNavigator = () => {
     </Stack.Navigator>
   );
 };
+
+export default LoginRegStackNavigator;

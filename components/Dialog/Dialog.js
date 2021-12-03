@@ -1,7 +1,7 @@
-import React from "react";
-import { StyleSheet } from "react-native";
-import { Avatar, ListItem } from "react-native-elements";
-import { TouchableOpacity } from "react-native-gesture-handler";
+import React from 'react';
+import { StyleSheet } from 'react-native';
+import { Avatar, ListItem } from 'react-native-elements';
+import ImagesApi from '../../api/ImagesApi';
 
 export const Dialog = ({
   avatar,
@@ -10,20 +10,21 @@ export const Dialog = ({
   onPressDialog,
   onPressAvatarDialog,
 }) => {
+  const avatarProps = {
+    title: name[0],
+    size: 'large',
+    rounded: true,
+    onPress: onPressAvatarDialog,
+  };
+  if (avatar) {
+    avatarProps.source = { uri: avatar };
+  }
   return (
-    <ListItem
-      title={name}
-      titleStyle={styles.title}
-      subtitle={message}
-      subtitleStyle={styles.subtitle}
-      bottomDivider
-      onPress={onPressDialog}
-    >
+    <ListItem bottomDivider onPress={onPressDialog}>
       <Avatar
-        source={{ uri: avatar }}
-        size={"large"}
-        rounded
-        onPress={onPressAvatarDialog}
+        {...avatarProps}
+        avatarStyle={styles['avatar']}
+        titleStyle={styles['titleStyle']}
       />
       <ListItem.Content>
         <ListItem.Title style={styles.title}>{name}</ListItem.Title>
@@ -35,11 +36,17 @@ export const Dialog = ({
 };
 
 const styles = StyleSheet.create({
+  titleStyle: {
+    color: 'whitesmoke',
+  },
+  avatar: {
+    zIndex: -1,
+  },
   title: {
     fontSize: 24,
-    color: "#3F3F3F",
+    color: '#3F3F3F',
   },
   subtitle: {
-    color: "#A5A5A5",
+    color: '#A5A5A5',
   },
 });

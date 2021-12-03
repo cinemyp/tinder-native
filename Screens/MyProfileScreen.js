@@ -1,48 +1,81 @@
-import React, { useEffect } from 'react';
-import { auth } from '../firebase';
+import React, { useEffect, useState } from 'react';
 import { useStoreon } from 'storeon/react';
+import { getUserAge } from '../utils/date';
+import AuthApi from '../api/AuthApi';
 import { StatusBar } from 'expo-status-bar';
-import { Image, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { Text, Button } from 'react-native-elements';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import Layout from '../constants/Layout';
+import { LazyImage } from '../components/LazyImage';
+import { openImagePickerAsync } from '../utils/images';
+import ImagesApi from '../api/ImagesApi';
+import LoadingView from '../components/LoadingView';
 
-export default function MyProfileScreen({
-  age = 25,
-  onPressSettings,
-  onPressEdit,
-  navigation,
-}) {
-  const { dispatch, currentUser } = useStoreon('currentUser');
-  const { name } = currentUser;
+const EditButton = ({ onPressEdit }) => (
+  <View style={styles['editButton']}>
+    <Button
+      icon={<Ionicons name={'pencil-sharp'} size={42} color={'#4E4E4E'} />}
+      type={'clear'}
+      onPress={onPressEdit}
+    />
+  </View>
+);
+
+export default function MyProfileScreen({ navigation }) {
+  const { currentUser, dispatch } = useStoreon('currentUser');
+  const { id, name, birthdayDate, avatarId, thumbnailId } = currentUser;
+
+  const [loading, setLoading] = useState(false);
+
+  const age = getUserAge(birthdayDate?.seconds ?? 0);
+
   const handlePressLogout = () => {
-    //TODO: заменить на апи метод
-    auth
-      .signOut()
-      .then(() => {})
-      .catch((error) => alert(error.message));
+    AuthApi.signOut();
+  };
+  const handlePressEdit = async () => {
+    const result = await openImagePickerAsync();
+    if (!result) {
+      return;
+    }
+    setLoading(true);
+    await ImagesApi.updateAvatar(
+      id,
+      avatarId,
+      result.avatarUri,
+      thumbnailId,
+      result.thumbnailUri
+    );
+    dispatch('user/get');
+    setLoading(false);
   };
 
   useEffect(() => {
-    console.log(currentUser);
+    if (currentUser.name) return;
+    setLoading(true);
+
+    dispatch('user/get');
+    setLoading(false);
   }, []);
 
   return (
     <SafeAreaView style={styles.container}>
+      <LoadingView show={loading} />
       <View style={styles.imageContainer}>
-        <Image
-          style={styles.avatar}
-          source={{
-            uri: 'https://images.pexels.com/photos/774909/pexels-photo-774909.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260',
-          }}
+        <LazyImage
+          thumbnailSource={{ uri: currentUser.thumbnailUrl }}
+          source={{ uri: currentUser.avatarUrl }}
+          style={{ width: 250, height: 250, borderRadius: 125 }}
+          resizeMode={'cover'}
         />
+        <EditButton onPressEdit={handlePressEdit} />
       </View>
       <Text h2 style={styles.name}>
         {name}, {age}
       </Text>
       <View style={styles.buttons}>
-        <Button
+        {/*  <Button
           icon={<Ionicons name={'settings'} size={42} color={'#4E4E4E'} />}
           iconPosition={'top'}
           title={'settings'.toUpperCase()}
@@ -57,9 +90,14 @@ export default function MyProfileScreen({
           titleStyle={{ color: '#5e5e5e', fontSize: 12 }}
           type={'clear'}
           onPress={onPressEdit}
-        />
+        />*/}
       </View>
-      <Button title={'logout'.toUpperCase()} onPress={handlePressLogout} />
+      <Button
+        title={'Log out'}
+        onPress={handlePressLogout}
+        type={'clear'}
+        titleStyle={styles['logOut']}
+      />
       <StatusBar style="auto" />
     </SafeAreaView>
   );
@@ -82,6 +120,7 @@ const styles = StyleSheet.create({
   },
   imageContainer: {
     margin: 20,
+    position: 'relative',
   },
   name: {
     color: '#000',
@@ -92,5 +131,15 @@ const styles = StyleSheet.create({
     width: Layout.window.width - 100,
     justifyContent: 'space-between',
     marginTop: 10,
+  },
+  logOut: {
+    color: 'red',
+  },
+  editButton: {
+    position: 'absolute',
+    bottom: -10,
+    right: 0,
+    backgroundColor: '#d5d5d5',
+    borderRadius: 10,
   },
 });

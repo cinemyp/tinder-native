@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import {
+  Alert,
   KeyboardAvoidingView,
   StyleSheet,
   TextInput,
@@ -8,48 +9,34 @@ import {
 } from 'react-native';
 import { Button, Text } from 'react-native-elements';
 import { useStoreon } from 'storeon/react';
-import { auth } from '../firebase';
+import authApi from '../api/AuthApi';
+import { isIosPlatform } from '../constants';
 
 export const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const { dispatch } = useStoreon('user');
+  const { dispatch } = useStoreon('user/get');
 
   const handlePressRegisterLink = () => {
     navigation.navigate('Register');
   };
 
   const handlePressLogin = () => {
-    auth
-      .signInWithEmailAndPassword(email, password)
-      .then((userCredentials) => {
-        const user = userCredentials.user;
-        //запрашиваем данные о пользователе и сохраняем в сторе
-        dispatch('user/get');
-      })
-      .catch((error) => console.log(error.message));
+    authApi.signIn(email, password, dispatch);
   };
 
-  // useEffect((user) => {
-  //   const unsubscribe = auth.onAuthStateChanged((user) => {
-  //     if (user) {
-  //       navigation.replace('HomeTabs');
-  //     }
-  //   });
-
-  //   return unsubscribe;
-  // }, []);
-
   return (
-    <KeyboardAvoidingView style={styles['container']} behavior={'padding'}>
+    <KeyboardAvoidingView
+      style={styles['container']}
+      behavior={isIosPlatform() ? 'padding' : 'height'}
+    >
       <View style={styles['inputContainer']}>
         <TextInput
           placeholder={'Email'}
           style={styles['input']}
           value={email}
           onChangeText={(text) => setEmail(text)}
-          onSubmitEditing={() => this.passwordInput.focus()}
           keyboardType={'email-address'}
           autoCompleteType={'email'}
           autoCapitalize={'none'}
@@ -58,20 +45,18 @@ export const LoginScreen = ({ navigation }) => {
         />
         <TextInput
           placeholder={'Password'}
-          ref={(input) => (this.passwordInput = input)}
           style={styles['input']}
           value={password}
           onChangeText={(text) => setPassword(text)}
-          keyboardType={'visible-password'}
           autoCompleteType={'password'}
           returnKeyType={'go'}
-          secureTextEntry
+          secureTextEntry={true}
         />
       </View>
       <View style={styles['buttonContainer']}>
         <Button
           title={'Login'}
-          buttonStyle={styles['button']}
+          containerStyle={styles['button']}
           onPress={handlePressLogin}
         />
         <Text style={styles['registerText']}>You don't have an account?</Text>
@@ -108,9 +93,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: 80,
   },
-  button: {
-    width: '100%',
-  },
+  button: { width: '100%' },
   registerText: {
     marginTop: 15,
     color: '#a5a5a5',
