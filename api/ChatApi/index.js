@@ -1,4 +1,5 @@
 import { auth, firestore, firebase } from '../../firebase';
+import { limitText } from '../../utils';
 import ImagesApi from '../ImagesApi';
 import UserApi from '../UserApi';
 
@@ -80,13 +81,19 @@ const sendMessage = (text, dialog, currentUser) => {
     .doc(uid)
     .collection('userDialogs')
     .doc(dialog._id)
-    .set({ latestMessage: { text, createdAt: Date.now() } }, { merge: true });
+    .set(
+      { latestMessage: { text: limitText(text, 30), createdAt: Date.now() } },
+      { merge: true }
+    );
   firestore
     .collection('dialogs')
     .doc(dialog.participant._id)
     .collection('userDialogs')
     .doc(dialog._id)
-    .set({ latestMessage: { text, createdAt: Date.now() } }, { merge: true });
+    .set(
+      { latestMessage: { text: limitText(text, 30), createdAt: Date.now() } },
+      { merge: true }
+    );
 };
 
 const messagesHandler = (dialog, setMessages) => {
