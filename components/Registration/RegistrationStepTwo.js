@@ -1,6 +1,6 @@
 import React from 'react';
 import { TextInput, View } from 'react-native';
-import { Button } from 'react-native-elements';
+import { Button, Text } from 'react-native-elements';
 import DateTimePicker from '@react-native-community/datetimepicker';
 
 export const RegistrationStepTwo = ({ setState, next, values, styles }) => {
@@ -9,6 +9,7 @@ export const RegistrationStepTwo = ({ setState, next, values, styles }) => {
   };
   return (
     <>
+      <Text h4>Choose your birthday</Text>
       <View style={styles['dateContainer']}>
         <DateTimePicker
           mode={'date'}
