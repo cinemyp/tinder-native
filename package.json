@@ -1,9 +1,8 @@
 {
-  "main": "node_modules/expo/AppEntry.js",
   "scripts": {
-    "start": "expo start",
-    "android": "expo start --android",
-    "ios": "expo start --ios",
+    "start": "react-native start",
+    "android": "react-native run-android",
+    "ios": "react-native run-ios",
     "web": "expo start --web",
     "eject": "expo eject"
   },
@@ -17,13 +16,19 @@
     "@react-navigation/stack": "^6.0.11",
     "dayjs": "^1.10.7",
     "expo": "~42.0.1",
+    "expo-app-auth": "~10.2.2",
+    "expo-auth-session": "~3.3.1",
     "expo-image-manipulator": "~9.2.2",
     "expo-image-picker": "~10.2.2",
+    "expo-random": "~11.2.0",
+    "expo-splash-screen": "~0.11.2",
     "expo-status-bar": "~1.0.4",
+    "expo-updates": "~0.8.1",
+    "expo-web-browser": "~9.2.0",
     "firebase": "8.2.3",
     "react": "16.13.1",
     "react-dom": "16.13.1",
-    "react-native": "https://github.com/expo/react-native/archive/sdk-42.0.0.tar.gz",
+    "react-native": "~0.63.4",
     "react-native-chart-kit": "^6.11.0",
     "react-native-deck-swiper": "^2.0.5",
     "react-native-elements": "^3.4.2",
@@ -35,11 +40,14 @@
     "react-native-safe-area-context": "3.2.0",
     "react-native-screens": "~3.4.0",
     "react-native-swipe-list-view": "^3.2.9",
+    "react-native-unimodules": "0.14.10",
     "react-native-web": "^0.17.5",
     "storeon": "^3.1.4"
   },
   "devDependencies": {
     "@babel/core": "^7.9.0"
   },
-  "private": true
+  "private": true,
+  "name": "tinder-native",
+  "version": "1.0.0"
 }

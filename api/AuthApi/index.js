@@ -1,6 +1,29 @@
+import { makeRedirectUri, ResponseType } from 'expo-auth-session';
 import { Alert } from 'react-native';
 import { auth, firestore, firebase } from '../../firebase';
 import ImagesApi from '../ImagesApi';
+
+const spotifyAuthConfig = {
+  clientId: '52b5817b6c974c8d8d442f70b77f4c9e',
+  clientSecret: '6bed9bf16d0d4ee68ba111f41790de8f',
+  responseType: ResponseType.Token,
+  redirectUri: makeRedirectUri({
+    scheme: 'com.tinify://oauth/',
+  }),
+  usePKCE: false,
+  scopes: [
+    'playlist-read-private',
+    'playlist-modify-public',
+    'playlist-modify-private',
+    'user-library-read',
+    'user-library-modify',
+    'user-top-read',
+  ],
+};
+const serviceConfiguration = {
+  authorizationEndpoint: 'https://accounts.spotify.com/authorize',
+  tokenEndpoint: 'https://accounts.spotify.com/api/token',
+};
 
 const signIn = (email, password, dispatch) => {
   auth
@@ -58,4 +81,10 @@ const saveProfileData = (dispatch) => {
   dispatch('user/get');
 };
 
-export default { signIn, signOut, signOn };
+export default {
+  signIn,
+  signOut,
+  signOn,
+  spotifyAuthConfig,
+  serviceConfiguration,
+};
