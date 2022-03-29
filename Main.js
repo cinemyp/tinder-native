@@ -16,6 +16,10 @@ const Main = () => {
   //     </View>
   //   );
   // }
+  useEffect(() => {
+    console.log(authState);
+  }, [authState]);
+
   if (!authState.isSignedIn) {
     return <LoginRegStackNavigator />;
   }

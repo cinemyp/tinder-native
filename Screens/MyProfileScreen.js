@@ -25,14 +25,12 @@ const EditButton = ({ onPressEdit }) => (
 
 export default function MyProfileScreen({ navigation }) {
   const { currentUser, dispatch } = useStoreon('currentUser');
-  const { id, name, birthdayDate, avatarId, thumbnailId } = currentUser;
+  const { id, name, age, birthdayDate, avatarId, thumbnailId } = currentUser;
 
   const [loading, setLoading] = useState(false);
 
-  const age = getUserAge(birthdayDate?.seconds ?? 0);
-
   const handlePressLogout = () => {
-    AuthApi.signOut();
+    AuthApi.signOut(dispatch);
   };
   const handlePressEdit = async () => {
     const result = await openImagePickerAsync();

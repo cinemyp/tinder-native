@@ -1,9 +1,6 @@
-import { makeRedirectUri, ResponseType } from 'expo-auth-session';
-import { Alert } from 'react-native';
-import { auth, firestore, firebase } from '../../firebase';
-import ImagesApi from '../ImagesApi';
 import * as SecureStore from 'expo-secure-store';
 import axios from 'axios';
+import { Alert } from 'react-native';
 
 const signIn = async (callback, dispatch) => {
   const res = await axios
@@ -18,56 +15,41 @@ const signIn = async (callback, dispatch) => {
       });
     });
   try {
-    await SecureStore.setItemAsync('token', JSON.stringify(res.data));
+    await SecureStore.setItemAsync('token', res.data.access_token);
     dispatch('auth/update', { isSignedIn: true });
   } catch (err) {
     dispatch('auth/update', { isSignedIn: false });
   }
 };
 
-const signOut = () => {
-  dispatch('auth/update', { isSignedIn: false });
+const signOut = async (dispatch) => {
+  try {
+    await SecureStore.setItemAsync('token', '');
+    dispatch('auth/update', { isSignedIn: false });
+  } catch (err) {
+    console.log(err);
+  }
+};
 
-  // auth
-  //   .signOut()
-  //   .then(() => {})
-  //   .catch((error) => Alert.alert(error.message));
-};
-const signOn = (
-  { email, password, name, date, imageUri, thumbnailUri, genderId },
-  dispatch,
-  setProgressLoading
-) => {
-  // dispatch('auth/update', { registration: true });
-  // auth
-  //   .createUserWithEmailAndPassword(email, password)
-  //   .then((userCredentials) => {
-  //     const { uid } = auth.currentUser;
-  //     firestore
-  //       .collection('users')
-  //       .doc(uid)
-  //       .set({ name, email, birthdayDate: date, genderId });
-  //     return uid;
-  //   })
-  //   .then((uid) =>
-  //     ImagesApi.uploadAvatarImage(
-  //       uid,
-  //       imageUri,
-  //       thumbnailUri,
-  //       setProgressLoading
-  //     )
-  //   )
-  //   .then((snapshot) => {
-  //     saveProfileData(dispatch);
-  //     dispatch('auth/update', { registration: false });
-  //   });
-};
-const saveProfileData = (dispatch) => {
-  dispatch('user/get');
+const getMe = async () => {
+  const token = await SecureStore.getItemAsync('token');
+  const res = await axios
+    .get('http://192.168.0.17:8000/auth/me', {
+      headers: {
+        Authorization: 'Oauth ' + token,
+      },
+    })
+    .then((me) => {
+      return me;
+    })
+    .catch((err) => {
+      Alert.alert('Error', 'Some error');
+    });
+  return res.data;
 };
 
 export default {
   signIn,
   signOut,
-  signOn,
+  getMe,
 };

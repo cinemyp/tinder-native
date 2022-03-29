@@ -1,7 +1,12 @@
-export const getUserAge = (seconds) => {
-  console.log(seconds);
-  const difference = Date.now() - seconds * 1000;
-  console.log(difference);
+export const getUserAge = (birthday) => {
+  let milliseconds = 0;
+  if (birthday instanceof Date) {
+    milliseconds = birthday.seconds;
+  } else if (typeof birthday === 'string') {
+    const date = Date.parse(birthday);
+    milliseconds = date;
+  }
+  const difference = Date.now() - milliseconds;
   const ageDate = new Date(difference);
   return Math.abs(ageDate.getUTCFullYear() - 1970);
 };
