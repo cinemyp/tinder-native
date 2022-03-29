@@ -2,41 +2,18 @@ import React from 'react';
 import { KeyboardAvoidingView, StyleSheet, View } from 'react-native';
 import { Button } from 'react-native-elements';
 import { useStoreon } from 'storeon/react';
-import authApi from '../api/AuthApi';
-import { isIosPlatform } from '../constants';
 import * as WebBrowser from 'expo-web-browser';
 
-const discovery = {
-  authorizationEndpoint:
-    'https://us-central1-tinder-native-5420b.cloudfunctions.net/redirect/',
-  tokenEndpoint:
-    'https://us-central1-tinder-native-5420b.cloudfunctions.net/token/',
-};
+import authApi from '../api/AuthApi';
+import { isIosPlatform } from '../constants';
 
 export const LoginScreen = ({ navigation }) => {
-  const { dispatch } = useStoreon('user/get');
+  const { dispatch } = useStoreon('auth/update');
 
   const handlePressLogin = async () => {
-    // console.log(request);
-    // promptAsync();
-    const authGrantState = await fetch(
-      'https://us-central1-tinder-native-5420b.cloudfunctions.net/redirect/'
-    )
-      .then(({ url }) =>
-        WebBrowser.openAuthSessionAsync(url, 'exp://localhost:19000')
-      )
-      .then((code) => {
-        let result = code.url.match(/\?.*code=(.*)&.*state=(.*)/);
-        return { code: result[1], state: result[2] };
-      });
-
-    fetch(
-      `https://us-central1-tinder-native-5420b.cloudfunctions.net/token/?code=${authGrantState.code}&state=${authGrantState.state}`
-    )
-      .then((res) => res.json())
-      .then((res) => console.log(res))
-      .catch((err) => console.log(err));
+    await authApi.signIn(WebBrowser.openAuthSessionAsync, dispatch);
   };
+
   return (
     <KeyboardAvoidingView
       style={styles['container']}
