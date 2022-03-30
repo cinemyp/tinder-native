@@ -25,16 +25,15 @@ class ChatApi extends BaseApi {
   async getMessages(dialogId) {
     try {
       const res = await this.get('/api/msg/' + dialogId);
-      console.log(res.data);
+      return res.data;
     } catch (err) {
       console.error(err);
     }
   }
 
-  async sendMessage(dialogId, content) {
+  async sendMessage(dialogId, fromId, content) {
     try {
-      const res = await this.post('/api/msg/' + dialogId, { content });
-      console.log(res.data);
+      const res = await this.post('/api/msg/' + dialogId, { fromId, content });
     } catch (err) {
       console.error(err);
     }

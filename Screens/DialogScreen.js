@@ -15,8 +15,7 @@ const DialogScreen = ({ route }) => {
 
   const handleSend = useCallback((messages = []) => {
     const text = messages[0].text;
-
-    ChatApi.sendMessage(text, dialog, currentUser);
+    ChatApi.sendMessage(dialog._id, currentUser._id, text);
   }, []);
 
   useEffect(async () => {
@@ -31,7 +30,7 @@ const DialogScreen = ({ route }) => {
       messages={messages}
       onSend={(messages) => handleSend(messages)}
       user={{
-        _id: currentUser.id,
+        _id: currentUser._id,
       }}
       messagesContainerStyle={styles.messagesContainer}
       renderBubble={(props) => {
