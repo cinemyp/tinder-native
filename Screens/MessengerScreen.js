@@ -11,12 +11,15 @@ import { EmptyMessengerView } from '../components/EmptyViews/EmptyMessengerView'
 const LATEST_MESSAGE_DEFAULT = 'New Dialog';
 
 export default function MessengerScreen({ navigation }) {
+  const { currentUser } = useStoreon('currentUser');
   const [dialogs, setDialogs] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const unsubscribe = ChatApi.dialogListener(setDialogs, loading, setLoading);
-    return () => unsubscribe();
+  useEffect(async () => {
+    // const unsubscribe = ChatApi.dialogListener(setDialogs, loading, setLoading);
+    // return () => unsubscribe();
+    const dialogs = await ChatApi.getDialogs(currentUser._id);
+    setDialogs(dialogs);
   }, []);
 
   const handlePressDialog = (item) => {

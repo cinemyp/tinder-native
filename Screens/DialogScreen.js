@@ -19,9 +19,11 @@ const DialogScreen = ({ route }) => {
     ChatApi.sendMessage(text, dialog, currentUser);
   }, []);
 
-  useEffect(() => {
-    const messageListener = ChatApi.messagesHandler(dialog, setMessages);
-    return () => messageListener();
+  useEffect(async () => {
+    const data = await ChatApi.getMessages(dialog._id);
+    setMessages(data);
+    // const messageListener = ChatApi.messagesHandler(dialog, setMessages);
+    // return () => messageListener();
   }, []);
 
   return (

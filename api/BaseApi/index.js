@@ -11,7 +11,6 @@ class BaseApi {
   }
 
   async get(endpoint, config = {}) {
-    console.log(endpoint);
     return axios.get(this.serverUrl + endpoint, { ...config });
   }
 
