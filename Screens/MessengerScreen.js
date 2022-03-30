@@ -4,9 +4,9 @@ import { ScrollView, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useStoreon } from 'storeon/react';
 import ChatApi from '../api/ChatApi';
-import ImagesApi from '../api/ImagesApi';
 import { Dialog } from '../components/Dialog/Dialog';
 import { EmptyMessengerView } from '../components/EmptyViews/EmptyMessengerView';
+import socketClient from 'socket.io-client';
 
 const LATEST_MESSAGE_DEFAULT = 'New Dialog';
 
@@ -15,15 +15,26 @@ export default function MessengerScreen({ navigation }) {
   const [dialogs, setDialogs] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(async () => {
-    // const unsubscribe = ChatApi.dialogListener(setDialogs, loading, setLoading);
-    // return () => unsubscribe();
-    const dialogs = await ChatApi.getDialogs(currentUser._id);
-    setDialogs(dialogs);
+  const socket = socketClient('http://192.168.0.17:8000', {
+    query: {
+      userId: currentUser._id,
+    },
+  });
+  useEffect(() => {
+    socket.on('user dialogs', (data) => {
+      setDialogs(data);
+    });
+    const unsubscribe = navigation.addListener('focus', () => {
+      socket.emit('dialogs', currentUser._id);
+    });
+    return () => {
+      socket.off();
+      return unsubscribe;
+    };
   }, []);
 
   const handlePressDialog = (item) => {
-    navigation.navigate('Dialog', { dialog: item });
+    navigation.navigate('Dialog', { dialog: item, socket: socket });
   };
   const handlePressAvatarDialog = (participant) => {
     // navigation.navigate('Profile', { profile: participant });

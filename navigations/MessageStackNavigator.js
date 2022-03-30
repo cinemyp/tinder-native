@@ -34,7 +34,6 @@ const MessageStackNavigator = () => {
         name={'Dialog'}
         component={DialogScreen}
         options={({ route }) => ({
-          headerTitle: route.params.dialog.participant.name,
           headerStyle: { height: 110 },
           headerBackTitle: BACK_TITLE,
         })}

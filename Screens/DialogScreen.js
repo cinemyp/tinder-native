@@ -1,28 +1,38 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { StyleSheet } from 'react-native';
 import { Bubble, GiftedChat } from 'react-native-gifted-chat';
-import { getBottomSpace } from 'react-native-iphone-x-helper';
+
+import { BackHandler } from 'react-native';
+
+import { useStoreon } from 'storeon/react';
 import { EmptyChatView } from '../components/EmptyViews/EmptyChatView';
 import { PRIMARY_COLOR } from '../constants/colors';
-import { useStoreon } from 'storeon/react';
-import ChatApi from '../api/ChatApi';
+import { getBottomSpace } from 'react-native-iphone-x-helper';
 
-const DialogScreen = ({ route }) => {
+const DialogScreen = ({ route, navigation }) => {
   const [messages, setMessages] = useState([]);
 
-  const { dialog } = route.params;
+  const { dialog, socket } = route.params;
   const { currentUser } = useStoreon('currentUser');
 
   const handleSend = useCallback((messages = []) => {
     const text = messages[0].text;
-    ChatApi.sendMessage(dialog._id, currentUser._id, text);
+    socket.emit('msg:send', dialog._id, currentUser._id, text);
   }, []);
 
+  const handleGoBack = () => {
+    socket.emit('dialogs', currentUser._id);
+  };
+
   useEffect(async () => {
-    const data = await ChatApi.getMessages(dialog._id);
-    setMessages(data);
-    // const messageListener = ChatApi.messagesHandler(dialog, setMessages);
-    // return () => messageListener();
+    socket.emit('msg:get', dialog._id);
+    socket.on('msg:update', (msgs) => {
+      setMessages(msgs);
+    });
+    const listener = navigation.addListener('beforeRemove', handleGoBack);
+    return () => {
+      return listener;
+    };
   }, []);
 
   return (

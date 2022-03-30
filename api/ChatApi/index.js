@@ -13,14 +13,14 @@ class ChatApi extends BaseApi {
     }
   }
 
-  async getDialogs(userId) {
-    try {
-      const res = await this.get('/api/dialog/' + userId);
-      return res.data;
-    } catch (err) {
-      console.error(err);
-    }
-  }
+  // async getDialogs(userId) {
+  //   try {
+  //     const res = await this.get('/api/dialog/' + userId);
+  //     return res.data;
+  //   } catch (err) {
+  //     console.error(err);
+  //   }
+  // }
 
   async getMessages(dialogId) {
     try {
