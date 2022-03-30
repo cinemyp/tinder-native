@@ -1,13 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+
+import { useStoreon } from 'storeon/react';
 import Swiper from 'react-native-deck-swiper';
+import { StyleSheet, Text } from 'react-native';
+import { StatusBar } from 'expo-status-bar';
+import { SafeAreaView } from 'react-native-safe-area-context';
+
+import ProfilesApi from '../api/ProfilesApi';
+import LikeApi from '../api/LikeApi';
+
 import { Card } from '../components/Card';
 import { EmptyProfileView } from '../components/EmptyViews/EmptyProfileView';
-import ProfilesApi from '../api/ProfilesApi';
-import { useStoreon } from 'storeon/react';
-import LikeApi from '../api/LikeApi';
 
 export default function HomeScreen({ navigation }) {
   const [viewProfiles, setViewProfiles] = useState(false);
@@ -25,7 +28,7 @@ export default function HomeScreen({ navigation }) {
   };
   const handleSwipedRight = (index) => {
     const { _id } = profilesData[index];
-    LikeApi.likeUser(_id);
+    LikeApi.likeUser(currentUser._id, _id);
     console.log('Swipe right');
   };
 
@@ -54,7 +57,7 @@ export default function HomeScreen({ navigation }) {
   }, [currentUser]);
 
   const loadProfiles = () => {
-    ProfilesApi.getProfiles(currentUser).then((profilesData) => {
+    ProfilesApi.getProfiles(currentUser._id).then((profilesData) => {
       if (profilesData.length === 0) {
         return;
       }

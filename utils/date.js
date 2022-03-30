@@ -1,7 +1,7 @@
 export const getUserAge = (birthday) => {
   let milliseconds = 0;
   if (birthday instanceof Date) {
-    milliseconds = birthday.seconds;
+    milliseconds = birthday.getMilliseconds();
   } else if (typeof birthday === 'string') {
     const date = Date.parse(birthday);
     milliseconds = date;

@@ -10,11 +10,10 @@ export const Card = ({
   name,
   avatarUrl,
   birthdayDate,
+  age,
   caption = '16 miles away',
   onPressCard,
 }) => {
-  const age = getUserAge(birthdayDate?.seconds ?? 0);
-
   return (
     <Tile
       imageSrc={{

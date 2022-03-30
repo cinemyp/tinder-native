@@ -5,7 +5,7 @@ export const EmptyProfileView = ({ titleReload, onReload }) => {
   return (
     <View style={styles.container}>
       <Text style={styles.emptyText}>There are no new profiles</Text>
-      {/* <Button title={titleReload} onPress={onReload} /> */}
+      <Button title={titleReload} onPress={onReload} />
     </View>
   );
 };
