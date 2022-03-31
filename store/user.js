@@ -9,9 +9,9 @@ export const user = (store) => {
     currentUser: { ...user },
   }));
   store.on('user/get', async ({ currentUser }) => {
-    if (currentUser.name) {
-      return;
-    }
+    // if (currentUser.name) {
+    //   return;
+    // }
     const { data } = await AuthApi.getMe();
     store.dispatch('user/save', {
       ...data,

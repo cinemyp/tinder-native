@@ -58,6 +58,7 @@ const resizeImage = async (imageUri) => {
     ],
     { compress: resizeOptions.compress, format: resizeOptions.saveFormat }
   );
+  console.log(manipResult);
   return { avatarUri: manipResult.uri, thumbnailUri: thumbnail.uri };
 };
 

@@ -10,8 +10,8 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import Layout from '../constants/Layout';
 import { LazyImage } from '../components/LazyImage';
 import { openImagePickerAsync } from '../utils/images';
-import ImagesApi from '../api/ImagesApi';
 import LoadingView from '../components/LoadingView';
+import ImageApi from '../api/ImagesApi';
 
 const EditButton = ({ onPressEdit }) => (
   <View style={styles['editButton']}>
@@ -25,8 +25,7 @@ const EditButton = ({ onPressEdit }) => (
 
 export default function MyProfileScreen({ navigation }) {
   const { currentUser, dispatch } = useStoreon('currentUser');
-  const { id, name, age, birthdayDate, avatarId, thumbnailId } = currentUser;
-
+  const { _id, name, age, birthdayDate, avatar, thumbnailId } = currentUser;
   const [loading, setLoading] = useState(false);
 
   const handlePressLogout = () => {
@@ -38,15 +37,17 @@ export default function MyProfileScreen({ navigation }) {
       return;
     }
     setLoading(true);
-    await ImagesApi.updateAvatar(
-      id,
-      avatarId,
-      result.avatarUri,
-      thumbnailId,
-      result.thumbnailUri
-    );
+    await ImageApi.updateImage(result.avatarUri, _id);
+
     dispatch('user/get');
     setLoading(false);
+    // await ImagesApi.updateAvatar(
+    //   id,
+    //   avatarId,
+    //   result.avatarUri,
+    //   thumbnailId,
+    //   result.thumbnailUri
+    // );
   };
 
   useEffect(() => {
@@ -63,7 +64,9 @@ export default function MyProfileScreen({ navigation }) {
       <View style={styles.imageContainer}>
         <LazyImage
           thumbnailSource={{ uri: currentUser.thumbnailUrl }}
-          source={{ uri: currentUser.avatarUrl }}
+          source={{
+            uri: `http://192.168.0.17:8000${currentUser.avatar}`,
+          }}
           style={{ width: 250, height: 250, borderRadius: 125 }}
           resizeMode={'cover'}
         />
