@@ -12,6 +12,7 @@ import { LazyImage } from '../components/LazyImage';
 import { openImagePickerAsync } from '../utils/images';
 import LoadingView from '../components/LoadingView';
 import ImageApi from '../api/ImagesApi';
+import { SERVER_URL } from '../constants';
 
 const EditButton = ({ onPressEdit }) => (
   <View style={styles['editButton']}>
@@ -65,7 +66,7 @@ export default function MyProfileScreen({ navigation }) {
         <LazyImage
           thumbnailSource={{ uri: currentUser.thumbnailUrl }}
           source={{
-            uri: `http://192.168.0.17:8000${currentUser.avatar}`,
+            uri: `${SERVER_URL + currentUser.avatar}`,
           }}
           style={{ width: 250, height: 250, borderRadius: 125 }}
           resizeMode={'cover'}

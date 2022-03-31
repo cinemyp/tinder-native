@@ -1,6 +1,7 @@
 import React from 'react';
 import { Platform, StyleSheet } from 'react-native';
 import { Tile } from 'react-native-elements';
+import { SERVER_URL } from '../../constants';
 import Layout from '../../constants/Layout';
 import { getUserAge } from '../../utils/date';
 
@@ -8,7 +9,7 @@ const BOTTOM_BAR_HEIGHT = !Platform.isPad ? 29 : 49;
 
 export const Card = ({
   name,
-  avatarUrl,
+  avatar,
   birthdayDate,
   age,
   caption = '16 miles away',
@@ -17,7 +18,7 @@ export const Card = ({
   return (
     <Tile
       imageSrc={{
-        uri: avatarUrl,
+        uri: `${SERVER_URL + avatar}`,
       }}
       imageContainerStyle={styles.imageContainer}
       title={name}

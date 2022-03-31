@@ -1,10 +1,12 @@
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
+
 import { createStoreon } from 'storeon';
-import { storeonParams } from './store';
 import { StoreContext } from 'storeon/react';
-import Main from './Main';
+import { storeonParams } from './store';
+
 import { LogBox, Platform } from 'react-native';
+import Main from './Main';
 
 const store = createStoreon(storeonParams);
 

@@ -52,6 +52,7 @@ export default function HomeScreen({ navigation }) {
 
   useEffect(() => {
     if (currentUser.name) {
+      console.log(currentUser._id);
       loadProfiles();
     }
   }, [currentUser]);

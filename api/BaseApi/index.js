@@ -1,13 +1,10 @@
 import axios from 'axios';
 import * as SecureStore from 'expo-secure-store';
+import { SERVER_URL } from '../../constants';
 
 class BaseApi {
   constructor() {
-    // this.serverUrl =
-    //   process.env.NODE_ENV === 'dev'
-    //     ? 'http://192.168.0.17:8000'
-    //     : 'https://192.168.0.17:8443';
-    this.serverUrl = 'http://192.168.0.17:8000';
+    this.serverUrl = SERVER_URL;
   }
 
   async get(endpoint, config = {}) {

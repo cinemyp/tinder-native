@@ -7,6 +7,7 @@ import ChatApi from '../api/ChatApi';
 import { Dialog } from '../components/Dialog/Dialog';
 import { EmptyMessengerView } from '../components/EmptyViews/EmptyMessengerView';
 import socketClient from 'socket.io-client';
+import { SERVER_URL } from '../constants';
 
 const LATEST_MESSAGE_DEFAULT = 'New Dialog';
 
@@ -15,7 +16,7 @@ export default function MessengerScreen({ navigation }) {
   const [dialogs, setDialogs] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const socket = socketClient('http://192.168.0.17:8000', {
+  const socket = socketClient(SERVER_URL, {
     query: {
       userId: currentUser._id,
     },
