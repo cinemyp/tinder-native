@@ -19,6 +19,7 @@ const DialogScreen = ({ route, navigation }) => {
   }, []);
 
   const handleGoBack = () => {
+    socket.emit('dialogs:leave', dialog._id);
     socket.emit('dialogs:get', currentUser._id);
   };
 
