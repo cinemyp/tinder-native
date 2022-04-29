@@ -22,7 +22,6 @@ class AuthApi extends BaseApi {
       if (!res) {
         return;
       }
-
       await this.setToken(res.data.access_token);
       dispatch('auth/update', { isSignedIn: true });
     } catch (err) {

@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { useStoreon } from 'storeon/react';
-import { getUserAge } from '../utils/date';
 import AuthApi from '../api/AuthApi';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, View } from 'react-native';
@@ -42,13 +41,6 @@ export default function MyProfileScreen({ navigation }) {
 
     dispatch('user/get');
     setLoading(false);
-    // await ImagesApi.updateAvatar(
-    //   id,
-    //   avatarId,
-    //   result.avatarUri,
-    //   thumbnailId,
-    //   result.thumbnailUri
-    // );
   };
 
   useEffect(() => {

@@ -2,10 +2,6 @@ import React, { useState } from 'react';
 import { Alert, KeyboardAvoidingView, StyleSheet } from 'react-native';
 import { useStoreon } from 'storeon/react';
 import AuthApi from '../api/AuthApi';
-import { RegistrationStepOne } from '../components/Registration/RegistrationStepOne';
-import { RegistrationStepThree } from '../components/Registration/RegistrationStepThree';
-import { RegistrationStepTwo } from '../components/Registration/RegistrationStepTwo';
-import { RegistrationStepFour } from '../components/Registration/RegistrationStepFour';
 import { PRIMARY_COLOR } from '../constants/colors';
 import { getUserAge } from '../utils/date';
 
@@ -63,49 +59,7 @@ export const RegisterScreen = () => {
     setStep((prevStep) => prevStep + 1);
   };
 
-  const steps = [
-    {
-      component: (
-        <RegistrationStepOne
-          setState={setState}
-          next={nextStep}
-          values={state}
-          styles={styles}
-        />
-      ),
-    },
-    {
-      component: (
-        <RegistrationStepTwo
-          setState={setState}
-          next={nextStep}
-          values={state}
-          styles={styles}
-        />
-      ),
-    },
-    {
-      component: (
-        <RegistrationStepThree
-          setState={setState}
-          next={nextStep}
-          values={state}
-          styles={styles}
-        />
-      ),
-    },
-    {
-      component: (
-        <RegistrationStepFour
-          setState={setState}
-          next={nextStep}
-          values={state}
-          styles={styles}
-          progressLoading={progressLoading}
-        />
-      ),
-    },
-  ];
+  const steps = [];
 
   const handlePressRegister = () => {
     AuthApi.signOn(state, dispatch, setProgressLoading);

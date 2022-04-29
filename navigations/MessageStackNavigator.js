@@ -1,11 +1,9 @@
-import { createStackNavigator } from '@react-navigation/stack';
 import React from 'react';
 import { useStoreon } from 'storeon/react';
-import DialogScreen from '../screens/DialogScreen';
-import { LoginScreen } from '../screens/LoginScreen';
-import { ProfileScreen } from '../screens/ProfileScreen';
-import { RegisterScreen } from '../screens/RegisterScreen';
+import { createStackNavigator } from '@react-navigation/stack';
 import HomeTabs from './HomeTabs';
+import { ProfileScreen } from '../screens/ProfileScreen';
+import DialogScreen from '../screens/DialogScreen';
 
 const Stack = createStackNavigator();
 

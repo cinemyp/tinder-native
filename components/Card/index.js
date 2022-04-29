@@ -3,7 +3,6 @@ import { Platform, StyleSheet } from 'react-native';
 import { Tile } from 'react-native-elements';
 import { SERVER_URL } from '../../constants';
 import Layout from '../../constants/Layout';
-import { getUserAge } from '../../utils/date';
 
 const BOTTOM_BAR_HEIGHT = !Platform.isPad ? 29 : 49;
 

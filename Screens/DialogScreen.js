@@ -2,8 +2,6 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { StyleSheet } from 'react-native';
 import { Bubble, GiftedChat } from 'react-native-gifted-chat';
 
-import { BackHandler } from 'react-native';
-
 import { useStoreon } from 'storeon/react';
 import { EmptyChatView } from '../components/EmptyViews/EmptyChatView';
 import { PRIMARY_COLOR } from '../constants/colors';

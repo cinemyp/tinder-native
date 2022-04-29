@@ -1,7 +1,7 @@
 import React from 'react';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { Avatar, ListItem } from 'react-native-elements';
-import ImagesApi from '../../api/ImagesApi';
+import { PRIMARY_COLOR } from '../../constants/colors';
 
 export const Dialog = ({
   avatar,
@@ -9,6 +9,7 @@ export const Dialog = ({
   message,
   onPressDialog,
   onPressAvatarDialog,
+  isNew,
 }) => {
   const avatarProps = {
     title: name[0],
@@ -27,8 +28,13 @@ export const Dialog = ({
         titleStyle={styles['titleStyle']}
       />
       <ListItem.Content>
-        <ListItem.Title style={styles.title}>{name}</ListItem.Title>
-        <ListItem.Subtitle style={styles.subtitle}>{message}</ListItem.Subtitle>
+        <View style={styles['listItem']}>
+          <ListItem.Title style={styles.title}>{name}</ListItem.Title>
+          <ListItem.Subtitle style={styles.subtitle}>
+            {message}
+          </ListItem.Subtitle>
+          {isNew && <View style={styles.newMark}></View>}
+        </View>
       </ListItem.Content>
       <ListItem.Chevron />
     </ListItem>
@@ -45,8 +51,21 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 24,
     color: '#3F3F3F',
+    position: 'relative',
   },
   subtitle: {
     color: '#A5A5A5',
+  },
+  newMark: {
+    backgroundColor: PRIMARY_COLOR,
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    position: 'absolute',
+    right: -15,
+    top: 12,
+  },
+  listItem: {
+    position: 'relative',
   },
 });

@@ -21,6 +21,7 @@ export default function MessengerScreen({ navigation }) {
       userId: currentUser._id,
     },
   });
+
   useEffect(() => {
     socket.on('user dialogs', (data) => {
       setDialogs(data);
@@ -35,25 +36,29 @@ export default function MessengerScreen({ navigation }) {
   }, []);
 
   const handlePressDialog = (item) => {
-    navigation.navigate('Dialog', { dialog: item, socket: socket });
+    navigation.navigate('Dialog', {
+      dialog: item,
+      socket: socket,
+      title: '123',
+    });
   };
   const handlePressAvatarDialog = (participant) => {
     // navigation.navigate('Profile', { profile: participant });
   };
 
   if (dialogs.length === 0) return <EmptyMessengerView />;
-
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView style={styles.fullHeight}>
         {dialogs.map(({ _id, latestMessage, participant }) => {
+          const isNotEmpty = !!latestMessage;
+
           return (
             <Dialog
               key={_id}
               name={participant.name}
-              message={
-                latestMessage ? latestMessage.text : LATEST_MESSAGE_DEFAULT
-              }
+              message={isNotEmpty ? latestMessage.text : LATEST_MESSAGE_DEFAULT}
+              isNew={!isNotEmpty}
               onPressDialog={() =>
                 handlePressDialog({ _id, latestMessage, participant })
               }
@@ -67,6 +72,7 @@ export default function MessengerScreen({ navigation }) {
     </SafeAreaView>
   );
 }
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
