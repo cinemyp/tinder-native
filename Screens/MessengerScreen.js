@@ -23,11 +23,11 @@ export default function MessengerScreen({ navigation }) {
   });
 
   useEffect(() => {
-    socket.on('user dialogs', (data) => {
+    socket.on('dialogs:send', (data) => {
       setDialogs(data);
     });
     const unsubscribe = navigation.addListener('focus', () => {
-      socket.emit('dialogs', currentUser._id);
+      socket.emit('dialogs:get', currentUser._id);
     });
     return () => {
       socket.off();

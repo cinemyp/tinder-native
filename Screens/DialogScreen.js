@@ -19,7 +19,7 @@ const DialogScreen = ({ route, navigation }) => {
   }, []);
 
   const handleGoBack = () => {
-    socket.emit('dialogs', currentUser._id);
+    socket.emit('dialogs:get', currentUser._id);
   };
 
   useEffect(async () => {
