@@ -13,7 +13,13 @@ const LoginRegStackNavigator = () => {
         component={LoginScreen}
         options={{ headerShown: false }}
       />
-      <Stack.Screen name={'Register'} component={RegisterScreen} />
+      <Stack.Screen
+        name={'Register'}
+        component={RegisterScreen}
+        options={{
+          presentation: 'modal',
+        }}
+      />
     </Stack.Navigator>
   );
 };

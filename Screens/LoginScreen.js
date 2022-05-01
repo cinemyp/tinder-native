@@ -11,7 +11,13 @@ export const LoginScreen = ({ navigation }) => {
   const { dispatch } = useStoreon('auth/update');
 
   const handlePressLogin = async () => {
-    await authApi.signIn(WebBrowser.openAuthSessionAsync, dispatch);
+    const result = await authApi.signIn(
+      WebBrowser.openAuthSessionAsync,
+      dispatch
+    );
+    if (true) {
+      navigation.navigate('Register');
+    }
   };
 
   return (

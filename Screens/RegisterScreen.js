@@ -1,73 +1,102 @@
 import React, { useState } from 'react';
-import { Alert, KeyboardAvoidingView, StyleSheet } from 'react-native';
+import {
+  Alert,
+  KeyboardAvoidingView,
+  Keyboard,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+} from 'react-native';
+import { Button } from 'react-native-elements';
 import { useStoreon } from 'storeon/react';
 import AuthApi from '../api/AuthApi';
+import ImageApi from '../api/ImagesApi';
+import { LazyImage } from '../components/LazyImage';
 import { PRIMARY_COLOR } from '../constants/colors';
-import { getUserAge } from '../utils/date';
+import { openImagePickerAsync } from '../utils/images';
 
-const defaultState = {
-  email: '',
-  password: '',
-  name: '',
-  imageUri: '',
-  thumbnailUri: '',
-  genderId: '',
-  date: new Date(),
-};
-
-const INITIAL_STEP = 0;
-const MAX_STEPS = 3;
-
-export const RegisterScreen = () => {
-  const [state, setState] = useState(defaultState);
-  const [step, setStep] = useState(INITIAL_STEP);
-  const [progressLoading, setProgressLoading] = useState(0);
-  const { dispatch } = useStoreon('authState');
-
-  const nextStep = () => {
-    switch (step) {
-      case 0:
-        if (!state.email || !state.password || !state.name) {
-          //TODO: проверка полей
-          Alert.alert('Error during registration', 'Fill in all the fields');
-          return;
-        }
-        break;
-      case 1:
-        const yearsOld = getUserAge(state.date.getTime() / 1000);
-        if (yearsOld < 18) {
-          Alert.alert(
-            'Error during registration',
-            'You are under the age of 18'
-          );
-
-          return;
-        }
-        break;
-      case 2:
-        break;
-      case 3:
-        if (!state.imageUri) {
-          return;
-        }
-        handlePressRegister();
-        return;
-      default:
-        return;
+export const RegisterScreen = ({ navigation }) => {
+  const { currentUser, dispatch } = useStoreon('currentUser');
+  const [image, setImage] = useState(null);
+  const [focus, setFocus] = useState(null);
+  const [desc, setDesc] = useState('');
+  const handleChooseImage = async () => {
+    const result = await openImagePickerAsync();
+    if (!result) {
+      return;
     }
-
-    setStep((prevStep) => prevStep + 1);
+    setImage(result.avatarUri);
+  };
+  const handleFocusText = () => {
+    setFocus(true);
+  };
+  const handlePressRegister = async () => {
+    await ImageApi.updateImage(image, currentUser._id);
+    dispatch('auth/update', { isSignedIn: true });
+    navigation.goBack();
+    // await AuthApi.signOn(state, dispatch, setProgressLoading);
   };
 
-  const steps = [];
-
-  const handlePressRegister = () => {
-    AuthApi.signOn(state, dispatch, setProgressLoading);
-  };
+  React.useEffect(() => {
+    if (!currentUser.name) {
+      dispatch('user/get');
+    }
+  }, []);
+  React.useLayoutEffect(() => {
+    navigation.setOptions({
+      headerRight: () =>
+        focus ? (
+          <Button
+            onPress={() => {
+              Keyboard.dismiss();
+              setFocus(false);
+            }}
+            title="Done"
+            type={'clear'}
+          />
+        ) : null,
+    });
+  }, [navigation, focus]);
 
   return (
     <KeyboardAvoidingView style={styles['container']} behavior={'padding'}>
-      {steps[step].component}
+      <View>
+        <Text style={styles['registerText']}>Welcome, {currentUser.name}</Text>
+        <Text style={styles['stepText']}>Step 1: The Profile Picture</Text>
+        {image ? (
+          <View style={styles['avatarContainer']}>
+            <LazyImage
+              source={{
+                uri: image,
+              }}
+              style={{ width: 150, height: 150, borderRadius: 25 }}
+              resizeMode={'cover'}
+            />
+          </View>
+        ) : (
+          <Button
+            title={'Choose from gallery'}
+            type={'clear'}
+            style={styles['registerLink']}
+            onPress={handleChooseImage}
+          />
+        )}
+        <Text style={styles['stepText']}>Step 2: The Description</Text>
+        <TextInput
+          placeholder="Enter your description"
+          style={styles['textArea']}
+          textAlign="left"
+          maxLength={250}
+          keyboardType="default"
+          onFocus={handleFocusText}
+        />
+      </View>
+      <Button
+        title={'Update Profile'}
+        style={styles['doneBtn']}
+        onPress={handlePressRegister}
+      />
     </KeyboardAvoidingView>
   );
 };
@@ -75,7 +104,7 @@ export const RegisterScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
+    paddingTop: 50,
     alignItems: 'center',
   },
   inputContainer: {
@@ -83,6 +112,14 @@ const styles = StyleSheet.create({
   },
   dateContainer: {
     width: '100%',
+  },
+  avatarContainer: {
+    marginTop: 15,
+  },
+  textArea: {
+    marginTop: 10,
+    fontSize: 20,
+    width: '80%',
   },
   input: {
     backgroundColor: '#fff',
@@ -101,11 +138,20 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   registerText: {
-    marginTop: 15,
-    color: '#a5a5a5',
+    color: '#555',
+    fontWeight: 'bold',
+    fontSize: 16,
+  },
+  stepText: {
+    fontWeight: 'bold',
+    color: PRIMARY_COLOR,
+    marginTop: 10,
   },
   registerLink: {
-    fontSize: 14,
+    marginTop: 10,
+  },
+  doneBtn: {
+    marginTop: 30,
   },
   thumbnail: {
     width: 250,

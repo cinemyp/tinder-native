@@ -4,22 +4,12 @@ import { createStackNavigator } from '@react-navigation/stack';
 import HomeTabs from './HomeTabs';
 import { ProfileScreen } from '../screens/ProfileScreen';
 import DialogScreen from '../screens/DialogScreen';
+import { RegisterScreen } from '../screens/RegisterScreen';
 
 const Stack = createStackNavigator();
 
 const MessageStackNavigator = () => {
-  //TODO: получаем из стора данные о диалоге
-  const name = 'Amelia';
-
-  const { dispatch, currentUser } = useStoreon('currentUser');
-
   const BACK_TITLE = 'Messages';
-
-  React.useEffect(() => {
-    if (!currentUser.name) {
-      dispatch('user/get');
-    }
-  }, []);
 
   return (
     <Stack.Navigator>

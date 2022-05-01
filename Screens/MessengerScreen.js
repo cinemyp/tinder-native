@@ -6,8 +6,7 @@ import { useStoreon } from 'storeon/react';
 import ChatApi from '../api/ChatApi';
 import { Dialog } from '../components/Dialog/Dialog';
 import { EmptyMessengerView } from '../components/EmptyViews/EmptyMessengerView';
-import socketClient from 'socket.io-client';
-import { SERVER_URL } from '../constants';
+import SocketContext from '../contexts';
 
 const LATEST_MESSAGE_DEFAULT = 'New Dialog';
 
@@ -16,11 +15,7 @@ export default function MessengerScreen({ navigation }) {
   const [dialogs, setDialogs] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const socket = socketClient(SERVER_URL, {
-    query: {
-      userId: currentUser._id,
-    },
-  });
+  const socket = React.useContext(SocketContext);
 
   useEffect(() => {
     socket.on('dialogs:send', (data) => {
@@ -30,12 +25,14 @@ export default function MessengerScreen({ navigation }) {
       socket.emit('dialogs:get', currentUser._id);
     });
     return () => {
+      console.log('off');
       socket.off();
       return unsubscribe;
     };
   }, []);
 
   const handlePressDialog = (item) => {
+    socket.emit('dialogs:join', item._id);
     navigation.navigate('Dialog', {
       dialog: item,
       socket: socket,

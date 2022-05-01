@@ -6,12 +6,14 @@ import { useStoreon } from 'storeon/react';
 import { EmptyChatView } from '../components/EmptyViews/EmptyChatView';
 import { PRIMARY_COLOR } from '../constants/colors';
 import { getBottomSpace } from 'react-native-iphone-x-helper';
+import SocketContext from '../contexts';
 
 const DialogScreen = ({ route, navigation }) => {
   const [messages, setMessages] = useState([]);
 
-  const { dialog, socket } = route.params;
+  const { dialog } = route.params;
   const { currentUser } = useStoreon('currentUser');
+  const socket = React.useContext(SocketContext);
 
   const handleSend = useCallback((messages = []) => {
     const text = messages[0].text;

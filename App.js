@@ -7,6 +7,7 @@ import { storeonParams } from './store';
 
 import { LogBox, Platform } from 'react-native';
 import Main from './Main';
+import SocketContext, { socket } from './contexts';
 
 const store = createStoreon(storeonParams);
 
@@ -16,9 +17,11 @@ if (Platform.OS === 'android') {
 export default function App() {
   return (
     <StoreContext.Provider value={store}>
-      <NavigationContainer>
-        <Main />
-      </NavigationContainer>
+      <SocketContext.Provider value={socket}>
+        <NavigationContainer>
+          <Main />
+        </NavigationContainer>
+      </SocketContext.Provider>
     </StoreContext.Provider>
   );
 }

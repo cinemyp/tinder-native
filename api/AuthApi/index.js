@@ -22,18 +22,23 @@ class AuthApi extends BaseApi {
       if (!res) {
         return;
       }
+      const { registrated } = res.data;
+      // if (registrated) {
+      //   dispatch('auth/update', { isSignedIn: true });
+      // }
       await this.setToken(res.data.access_token);
-      dispatch('auth/update', { isSignedIn: true });
+      return true;
     } catch (err) {
       console.log(err);
       dispatch('auth/update', { isSignedIn: false });
+      return false;
     }
   }
 
-  async signOut(dispatch) {
+  async updateProfile(user, dispatch) {
     try {
-      await SecureStore.setItemAsync('token', '');
-      dispatch('auth/update', { isSignedIn: false });
+      // await SecureStore.setItemAsync('token', '');
+      // dispatch('auth/update', { isSignedIn: false });
     } catch (err) {
       console.log(err);
     }

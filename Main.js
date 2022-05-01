@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
+
 import MessageStackNavigator from './navigations/MessageStackNavigator';
-import { auth } from './firebase';
-import { Text, View } from 'react-native';
 import LoginRegStackNavigator from './navigations/LoginRegStackNavigator';
 import { useStoreon } from 'storeon/react';
 
