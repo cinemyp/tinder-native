@@ -33,6 +33,7 @@ export const RegisterScreen = ({ navigation }) => {
   };
   const handlePressRegister = async () => {
     await ImageApi.updateImage(image, currentUser._id);
+    dispatch('user/get');
     setTimeout(() => {
       dispatch('auth/update', { isSignedIn: true });
     }, 1000);
@@ -44,6 +45,7 @@ export const RegisterScreen = ({ navigation }) => {
       dispatch('user/get');
     }
   }, []);
+
   React.useLayoutEffect(() => {
     navigation.setOptions({
       headerRight: () =>

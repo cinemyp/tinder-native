@@ -10,26 +10,29 @@ import SocketContext from '../contexts';
 
 export const LoginScreen = ({ navigation }) => {
   const { dispatch, currentUser } = useStoreon('auth/update', 'currentUser');
+  const [logged, setLogged] = React.useState(null);
+
   const socket = React.useContext(SocketContext);
   const handlePressLogin = async () => {
     const result = await authApi.signIn(
       WebBrowser.openAuthSessionAsync,
       dispatch
     );
-    if (result) {
+    if (!result) {
       dispatch('user/get');
-    } else {
+      setLogged(true);
+    } else if (result === true) {
       navigation.navigate('Register');
     }
   };
 
   React.useEffect(() => {
-    if (currentUser._id) {
+    if (currentUser._id && logged) {
       socket.auth = { customId: currentUser._id };
       socket.connect();
       dispatch('auth/update', { isSignedIn: true });
     }
-  }, [currentUser]);
+  }, [currentUser, logged]);
 
   return (
     <KeyboardAvoidingView

@@ -20,7 +20,7 @@ class AuthApi extends BaseApi {
           });
         });
       if (!res) {
-        return;
+        return null;
       }
       const { registrated } = res.data;
       await this.setToken(res.data.access_token);
