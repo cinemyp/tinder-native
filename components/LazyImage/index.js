@@ -2,7 +2,13 @@ import React from 'react';
 import { View, StyleSheet, Animated } from 'react-native';
 import { Image } from 'react-native-elements';
 
-export const LazyImage = ({ source, thumbnailSource, style, ...props }) => {
+export const LazyImage = ({
+  source,
+  thumbnailSource,
+  shadow,
+  style,
+  ...props
+}) => {
   let thumbnailAnimated = new Animated.Value(0);
   let imageAnimated = new Animated.Value(0);
   const handleThumbnailLoad = () => {
@@ -25,6 +31,7 @@ export const LazyImage = ({ source, thumbnailSource, style, ...props }) => {
         blurRadius={1}
         style={[styles.imageOverlay, style]}
       />
+      {shadow ? <View style={styles['imageShadow']}></View> : null}
     </View>
   );
 };
@@ -40,5 +47,12 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: '#e1e4e8',
     borderRadius: 125,
+  },
+  imageShadow: {
+    borderRadius: 15,
+    position: 'absolute',
+    width: '100%',
+    height: '100%',
+    backgroundColor: 'rgba(0, 0, 0, 0.2)',
   },
 });

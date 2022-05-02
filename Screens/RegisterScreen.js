@@ -32,10 +32,10 @@ export const RegisterScreen = ({ navigation }) => {
     setFocus(true);
   };
   const handlePressRegister = async () => {
+    console.log(image);
     await ImageApi.updateImage(image, currentUser._id);
     dispatch('auth/update', { isSignedIn: true });
     navigation.goBack();
-    // await AuthApi.signOn(state, dispatch, setProgressLoading);
   };
 
   React.useEffect(() => {
@@ -60,8 +60,8 @@ export const RegisterScreen = ({ navigation }) => {
   }, [navigation, focus]);
 
   return (
-    <KeyboardAvoidingView style={styles['container']} behavior={'padding'}>
-      <View>
+    <KeyboardAvoidingView behavior={'padding'}>
+      <View style={styles['container']}>
         <Text style={styles['registerText']}>Welcome, {currentUser.name}</Text>
         <Text style={styles['stepText']}>Step 1: The Profile Picture</Text>
         {image ? (
@@ -70,8 +70,9 @@ export const RegisterScreen = ({ navigation }) => {
               source={{
                 uri: image,
               }}
-              style={{ width: 150, height: 150, borderRadius: 25 }}
+              style={styles['thumbnail']}
               resizeMode={'cover'}
+              shadow
             />
           </View>
         ) : (
@@ -82,7 +83,7 @@ export const RegisterScreen = ({ navigation }) => {
             onPress={handleChooseImage}
           />
         )}
-        <Text style={styles['stepText']}>Step 2: The Description</Text>
+        {/* <Text style={styles['stepText']}>Step 2: The Description</Text>
         <TextInput
           placeholder="Enter your description"
           style={styles['textArea']}
@@ -90,31 +91,37 @@ export const RegisterScreen = ({ navigation }) => {
           maxLength={250}
           keyboardType="default"
           onFocus={handleFocusText}
-        />
+        /> */}
+        {image ? (
+          <View style={styles['doneBtnContainer']}>
+            <Button
+              title={'Update Profile'}
+              buttonStyle={styles['doneBtn']}
+              onPress={handlePressRegister}
+            />
+          </View>
+        ) : null}
       </View>
-      <Button
-        title={'Update Profile'}
-        style={styles['doneBtn']}
-        onPress={handlePressRegister}
-      />
     </KeyboardAvoidingView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    paddingTop: 50,
+    paddingTop: 30,
+    paddingLeft: 15,
+    paddingRight: 15,
+    paddingBottom: 15,
     alignItems: 'center',
+    position: 'relative',
   },
   inputContainer: {
     width: '80%',
   },
-  dateContainer: {
-    width: '100%',
-  },
   avatarContainer: {
-    marginTop: 15,
+    marginTop: 10,
+    width: '100%',
+    height: '90%',
   },
   textArea: {
     marginTop: 10,
@@ -138,7 +145,7 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   registerText: {
-    color: '#555',
+    color: '#a5a5a5',
     fontWeight: 'bold',
     fontSize: 16,
   },
@@ -150,15 +157,19 @@ const styles = StyleSheet.create({
   registerLink: {
     marginTop: 10,
   },
+  doneBtnContainer: {
+    position: 'absolute',
+    bottom: 80,
+    width: '50%',
+  },
   doneBtn: {
-    marginTop: 30,
+    backgroundColor: PRIMARY_COLOR,
   },
   thumbnail: {
-    width: 250,
-    height: 350,
+    width: '100%',
+    height: '100%',
     resizeMode: 'cover',
-    borderRadius: 5,
-    zIndex: 0,
+    borderRadius: 15,
   },
   imageContainer: {
     alignItems: 'center',
@@ -180,22 +191,5 @@ const styles = StyleSheet.create({
   addPhotoBtn: {
     position: 'absolute',
     zIndex: 99,
-  },
-  gender_btnContainer: {
-    justifyContent: 'center',
-    marginBottom: 50,
-  },
-  gender_button: {
-    marginTop: 50,
-    width: 150,
-    backgroundColor: PRIMARY_COLOR,
-    borderWidth: 1,
-    borderColor: 'black',
-  },
-  gender_button__nonselected: {
-    marginTop: 50,
-    width: 150,
-    backgroundColor: PRIMARY_COLOR + '95',
-    borderWidth: 0,
   },
 });

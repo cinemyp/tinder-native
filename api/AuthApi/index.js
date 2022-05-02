@@ -35,14 +35,7 @@ class AuthApi extends BaseApi {
     }
   }
 
-  async updateProfile(user, dispatch) {
-    try {
-      // await SecureStore.setItemAsync('token', '');
-      // dispatch('auth/update', { isSignedIn: false });
-    } catch (err) {
-      console.log(err);
-    }
-  }
+  async updateProfile(user, dispatch) {}
 
   async getMe() {
     const res = await this.get('/auth/me')
@@ -53,6 +46,15 @@ class AuthApi extends BaseApi {
         Alert.alert('Error', 'Some error');
       });
     return res.data;
+  }
+
+  async signOut() {
+    try {
+      await SecureStore.setItemAsync('token', '');
+      dispatch('auth/update', { isSignedIn: false });
+    } catch (err) {
+      console.log(err);
+    }
   }
 }
 const api = new AuthApi();
