@@ -43,6 +43,12 @@ const DialogScreen = ({ route, navigation }) => {
     };
   }, []);
 
+  React.useLayoutEffect(() => {
+    navigation.setOptions({
+      title: dialog.participant.name,
+    });
+  }, [navigation]);
+
   return (
     <GiftedChat
       messages={messages}
