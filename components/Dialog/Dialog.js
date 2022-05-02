@@ -1,6 +1,7 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Avatar, ListItem } from 'react-native-elements';
+import { SERVER_URL } from '../../constants';
 import { PRIMARY_COLOR } from '../../constants/colors';
 
 export const Dialog = ({
@@ -18,7 +19,7 @@ export const Dialog = ({
     onPress: onPressAvatarDialog,
   };
   if (avatar) {
-    avatarProps.source = { uri: avatar };
+    avatarProps.source = { uri: SERVER_URL + avatar };
   }
   return (
     <ListItem bottomDivider onPress={onPressDialog}>

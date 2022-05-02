@@ -20,6 +20,7 @@ export default function MessengerScreen({ navigation }) {
   useEffect(() => {
     socket.on('dialogs:send', (data) => {
       setDialogs(data);
+      console.log(data);
     });
     const unsubscribe = navigation.addListener('focus', () => {
       socket.emit('dialogs:get', currentUser._id);
@@ -58,7 +59,7 @@ export default function MessengerScreen({ navigation }) {
                 handlePressDialog({ _id, latestMessage, participant })
               }
               onPressAvatarDialog={() => handlePressAvatarDialog(participant)}
-              avatar={participant?.thumbnailUrl}
+              avatar={participant?.avatar}
             />
           );
         })}
