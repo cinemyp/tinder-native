@@ -23,11 +23,8 @@ class AuthApi extends BaseApi {
         return;
       }
       const { registrated } = res.data;
-      // if (registrated) {
-      //   dispatch('auth/update', { isSignedIn: true });
-      // }
       await this.setToken(res.data.access_token);
-      return true;
+      return registrated;
     } catch (err) {
       console.log(err);
       dispatch('auth/update', { isSignedIn: false });
@@ -48,9 +45,10 @@ class AuthApi extends BaseApi {
     return res.data;
   }
 
-  async signOut() {
+  async signOut(dispatch) {
     try {
       await SecureStore.setItemAsync('token', '');
+      dispatch('user/save', null);
       dispatch('auth/update', { isSignedIn: false });
     } catch (err) {
       console.log(err);

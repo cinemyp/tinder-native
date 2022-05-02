@@ -6,19 +6,30 @@ import * as WebBrowser from 'expo-web-browser';
 
 import authApi from '../api/AuthApi';
 import { isIosPlatform } from '../constants';
+import SocketContext from '../contexts';
 
 export const LoginScreen = ({ navigation }) => {
-  const { dispatch } = useStoreon('auth/update');
-
+  const { dispatch, currentUser } = useStoreon('auth/update', 'currentUser');
+  const socket = React.useContext(SocketContext);
   const handlePressLogin = async () => {
     const result = await authApi.signIn(
       WebBrowser.openAuthSessionAsync,
       dispatch
     );
-    if (true) {
+    if (result) {
+      dispatch('user/get');
+    } else {
       navigation.navigate('Register');
     }
   };
+
+  React.useEffect(() => {
+    if (currentUser._id) {
+      socket.auth = { customId: currentUser._id };
+      socket.connect();
+      dispatch('auth/update', { isSignedIn: true });
+    }
+  }, [currentUser]);
 
   return (
     <KeyboardAvoidingView

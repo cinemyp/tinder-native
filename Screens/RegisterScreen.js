@@ -32,9 +32,10 @@ export const RegisterScreen = ({ navigation }) => {
     setFocus(true);
   };
   const handlePressRegister = async () => {
-    console.log(image);
     await ImageApi.updateImage(image, currentUser._id);
-    dispatch('auth/update', { isSignedIn: true });
+    setTimeout(() => {
+      dispatch('auth/update', { isSignedIn: true });
+    }, 1000);
     navigation.goBack();
   };
 

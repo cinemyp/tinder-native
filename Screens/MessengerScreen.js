@@ -25,7 +25,6 @@ export default function MessengerScreen({ navigation }) {
       socket.emit('dialogs:get', currentUser._id);
     });
     return () => {
-      console.log('off');
       socket.off();
       return unsubscribe;
     };
@@ -35,7 +34,6 @@ export default function MessengerScreen({ navigation }) {
     socket.emit('dialogs:join', item._id);
     navigation.navigate('Dialog', {
       dialog: item,
-      socket: socket,
       title: '123',
     });
   };

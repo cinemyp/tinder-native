@@ -17,7 +17,13 @@ const DialogScreen = ({ route, navigation }) => {
 
   const handleSend = useCallback((messages = []) => {
     const text = messages[0].text;
-    socket.emit('msg:send', dialog._id, currentUser._id, text);
+    socket.emit(
+      'msg:send',
+      dialog._id,
+      currentUser._id,
+      dialog.participant._id,
+      text
+    );
   }, []);
 
   const handleGoBack = () => {
@@ -26,12 +32,13 @@ const DialogScreen = ({ route, navigation }) => {
   };
 
   useEffect(async () => {
-    socket.emit('msg:get', dialog._id);
     socket.on('msg:update', (msgs) => {
       setMessages(msgs);
     });
+    socket.emit('msg:get', dialog._id);
     const listener = navigation.addListener('beforeRemove', handleGoBack);
     return () => {
+      socket.off();
       return listener;
     };
   }, []);

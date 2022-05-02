@@ -17,7 +17,7 @@ const Main = () => {
   // }
   useEffect(() => {
     console.log(authState);
-  }, [authState]);
+  }, [authState.isSignedIn]);
 
   if (!authState.isSignedIn) {
     return <LoginRegStackNavigator />;
