@@ -27,7 +27,7 @@ export default function MessengerScreen({ navigation }) {
     });
     return () => {
       socket.off();
-      return unsubscribe;
+      unsubscribe();
     };
   }, []);
 

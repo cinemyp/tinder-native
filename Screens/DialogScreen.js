@@ -39,7 +39,7 @@ const DialogScreen = ({ route, navigation }) => {
     const listener = navigation.addListener('beforeRemove', handleGoBack);
     return () => {
       socket.off();
-      return listener;
+      listener();
     };
   }, []);
 

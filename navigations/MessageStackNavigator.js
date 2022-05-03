@@ -29,7 +29,7 @@ const MessageStackNavigator = () => {
       <Stack.Screen
         name={'Profile'}
         component={ProfileScreen}
-        options={{ headerShown: true, headerBackTitle: BACK_TITLE }}
+        options={{ headerShown: false, headerBackTitle: BACK_TITLE }}
       />
     </Stack.Navigator>
   );

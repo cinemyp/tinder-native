@@ -18,10 +18,10 @@ export const LoginScreen = ({ navigation }) => {
       WebBrowser.openAuthSessionAsync,
       dispatch
     );
-    if (!result) {
+    if (result) {
       dispatch('user/get');
       setLogged(true);
-    } else if (result === true) {
+    } else if (result === false) {
       navigation.navigate('Register');
     }
   };

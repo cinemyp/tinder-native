@@ -1,8 +1,11 @@
 import React from 'react';
 import { Image, SafeAreaView, StyleSheet, View } from 'react-native';
-import { Divider, Icon, Text } from 'react-native-elements';
+import { Button, Divider, Icon, Text } from 'react-native-elements';
 import UserApi from '../api/UserApi';
+import { SERVER_URL } from '../constants';
 import Layout from '../constants/Layout';
+import Ionicons from '@expo/vector-icons/Ionicons';
+import { PRIMARY_COLOR } from '../constants/colors';
 
 const Social = ({ name }) => (
   <Icon
@@ -16,39 +19,51 @@ const Social = ({ name }) => (
 export const ProfileScreen = ({
   socials = [{ title: 'instagram' }],
   route,
+  navigation,
 }) => {
   const [profileData, setProfileData] = React.useState(null);
   const { profile } = route.params;
+
+  const handlePressBack = () => {
+    navigation.goBack();
+  };
+
   React.useEffect(() => {
-    if (!profile.avatarUrl) {
-      UserApi.getUserById(profile._id).then((user) => {
-        setProfileData(user);
-      });
-    } else {
-      setProfileData(profile);
-    }
+    setProfileData(profile);
   }, []);
 
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.imageContainer}>
-        <Image source={{ uri: profileData?.avatarUrl }} style={styles.image} />
+        <Image
+          source={{ uri: SERVER_URL + profileData?.avatar }}
+          style={styles.image}
+        />
+        <Button
+          icon={
+            <Ionicons
+              name={'chevron-back-circle'}
+              size={64}
+              color={PRIMARY_COLOR}
+              style={styles['iconBack']}
+            />
+          }
+          onPress={handlePressBack}
+          containerStyle={styles['btnContainer']}
+          buttonStyle={styles['btnBack']}
+          type={'clear'}
+        />
       </View>
-      <Text h4 style={styles.name}>
-        {profileData?.name}
-      </Text>
-      <Text style={styles.desc}>Fashion Designer at Amelia & Co.</Text>
-      <Divider style={styles.divider} />
-      <Text style={styles.desc}>
-        I love to travel. I have a cat named pickles. If he likes you, I
-        probably will too.
-      </Text>
-      <Divider style={styles.divider} />
-      <Text style={styles.desc}>Find me on Social here</Text>
-      <View style={styles.socialLinks}>
-        {socials.map(({ title, link }) => (
-          <Social key={title} name={title} link={link} />
-        ))}
+      <View style={styles['descWrapper']}>
+        <Text h2 style={styles.name}>
+          {profileData?.name}, {profileData?.age}
+        </Text>
+        <Divider style={styles.divider} />
+        <Text style={styles.desc}>
+          I love to travel. I have a cat named pickles. If he likes you, I
+          probably will too.
+        </Text>
+        <Divider style={styles.divider} />
       </View>
     </SafeAreaView>
   );
@@ -56,43 +71,40 @@ export const ProfileScreen = ({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
     backgroundColor: '#fff',
   },
   imageContainer: {
-    margin: 20,
+    margin: 0,
+    width: '100%',
+    maxHeight: '60%',
+    position: 'relative',
   },
   image: {
-    width: Layout.window.width - 60, // device width - some margin
-    height: Layout.window.height / 2 - 60, // device height / 2 - some margin
-    borderRadius: 20,
+    width: '100%',
+    height: '100%',
   },
   name: {
     color: '#5E5E5E',
     alignSelf: 'flex-start',
-    marginLeft: 30,
   },
   desc: {
     color: '#5E5E5E',
     alignSelf: 'flex-start',
     marginTop: 5,
-    marginHorizontal: 30,
-    fontSize: 14,
+    fontSize: 18,
   },
   divider: {
     backgroundColor: '#C0C0C0',
-    width: Layout.window.width - 60,
-    margin: 20,
+    maxWidth: Layout.window.width,
+    marginTop: 5,
   },
-  socialLinks: {
-    flex: 1,
-    alignItems: 'flex-start',
-    flexDirection: 'row',
-    width: Layout.window.width,
-    marginLeft: 40,
+  descWrapper: {
+    marginTop: 20,
+    paddingHorizontal: 20,
   },
-  iconContainer: {
-    paddingHorizontal: 8,
-    paddingVertical: 15,
+  btnContainer: {
+    position: 'absolute',
+    right: 0,
+    bottom: -30,
   },
 });

@@ -40,7 +40,7 @@ class AuthApi extends BaseApi {
         return me;
       })
       .catch((err) => {
-        Alert.alert('Error', 'Some error');
+        console.log(err);
       });
     return res.data;
   }

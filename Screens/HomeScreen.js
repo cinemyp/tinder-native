@@ -47,12 +47,11 @@ export default function HomeScreen({ navigation }) {
 
   const handleTapCard = () => {
     //TODO: вернуть навигацию обратно, когда будет полностью доделана страничка описания профиля
-    // navigation.navigate('Profile', { profile: profilesData[currentIndex] });
+    navigation.navigate('Profile', { profile: profilesData[currentIndex] });
   };
 
   useEffect(() => {
     if (currentUser.name) {
-      console.log(currentUser._id);
       loadProfiles();
     }
   }, [currentUser]);
