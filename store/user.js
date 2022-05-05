@@ -1,6 +1,4 @@
-import ImagesApi from '../api/ImagesApi';
 import AuthApi from '../api/AuthApi';
-import { auth, firestore, firebase } from '../firebase';
 import { getUserAge } from '../utils/date';
 
 export const user = (store) => {

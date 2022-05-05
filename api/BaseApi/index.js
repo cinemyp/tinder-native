@@ -5,6 +5,16 @@ import { SERVER_URL } from '../../constants';
 class BaseApi {
   constructor() {
     this.serverUrl = SERVER_URL;
+    axios
+      .get(
+        'https://avatars.yandex.net/get-music-content/4489759/d196b405.p.5880813/50x50'
+      )
+      .then((res) => {
+        console.log(res.data);
+      })
+      .catch(({ err }) => {
+        console.log(err);
+      });
   }
 
   async get(endpoint, config = {}) {
