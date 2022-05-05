@@ -3,7 +3,6 @@ import React, { useEffect, useState } from 'react';
 import { ScrollView, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useStoreon } from 'storeon/react';
-import ChatApi from '../api/ChatApi';
 import { Dialog } from '../components/Dialog/Dialog';
 import { EmptyMessengerView } from '../components/EmptyViews/EmptyMessengerView';
 import SocketContext from '../contexts';
@@ -20,7 +19,6 @@ export default function MessengerScreen({ navigation }) {
   useEffect(() => {
     socket.on('dialogs:send', (data) => {
       setDialogs(data);
-      console.log(data);
     });
     const unsubscribe = navigation.addListener('focus', () => {
       socket.emit('dialogs:get', currentUser._id);
@@ -35,7 +33,6 @@ export default function MessengerScreen({ navigation }) {
     socket.emit('dialogs:join', item._id);
     navigation.navigate('Dialog', {
       dialog: item,
-      title: '123',
     });
   };
   const handlePressAvatarDialog = (participant) => {

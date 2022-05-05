@@ -28,7 +28,7 @@ class AuthApi extends BaseApi {
     } catch (err) {
       console.log(err);
       dispatch('auth/update', { isSignedIn: false });
-      return false;
+      return null;
     }
   }
 

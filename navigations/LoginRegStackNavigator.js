@@ -18,6 +18,7 @@ const LoginRegStackNavigator = () => {
         component={RegisterScreen}
         options={{
           presentation: 'modal',
+          headerShown: false,
         }}
       />
     </Stack.Navigator>
