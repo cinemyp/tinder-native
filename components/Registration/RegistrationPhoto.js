@@ -36,36 +36,45 @@ export const RegistrationPhoto = ({
   onRemoveImage,
   next,
 }) => {
+  const [disabled, setDisabled] = React.useState(true);
+
+  React.useEffect(() => {
+    if (data.avatar) {
+      setDisabled(false);
+    } else {
+      setDisabled(true);
+    }
+  }, [data.avatar]);
+
   return (
     <View style={styles['container']}>
       <Text style={styles['registerText']}>Add Photo</Text>
       <View style={styles['avatarContainer']}>
-        {data.image && (
+        {data.avatar && (
           <LazyImage
             source={{
-              uri: data.image,
+              uri: data.avatar,
             }}
             style={styles['thumbnail']}
             resizeMode={'cover'}
             shadow
           />
         )}
-        {!data.image ? (
+        {!data.avatar ? (
           <AddPhotoBtn onChooseImage={onChooseImage} />
         ) : (
           <RemovePhotoBtn onRemoveImage={onRemoveImage} />
         )}
       </View>
 
-      {data.image && (
-        <View style={styles['doneBtnContainer']}>
-          <Button
-            title={'Next'}
-            buttonStyle={styles['doneBtn']}
-            onPress={next}
-          />
-        </View>
-      )}
+      <View style={styles['doneBtnContainer']}>
+        <Button
+          title={'Next'}
+          buttonStyle={styles['doneBtn']}
+          onPress={next}
+          disabled={disabled}
+        />
+      </View>
     </View>
   );
 };

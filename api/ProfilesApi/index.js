@@ -23,6 +23,15 @@ class ProfilesApi extends BaseApi {
       console.log(err);
     }
   }
+  async updateAccount(user) {
+    try {
+      console.log(user);
+      const res = await this.post('/api/profile/' + user._id, { ...user });
+      return res.data;
+    } catch (err) {
+      console.log(err);
+    }
+  }
 }
 
 const api = new ProfilesApi();

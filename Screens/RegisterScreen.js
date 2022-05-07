@@ -2,20 +2,25 @@ import React, { useState } from 'react';
 import { KeyboardAvoidingView, Keyboard } from 'react-native';
 import { Button } from 'react-native-elements';
 import { useStoreon } from 'storeon/react';
+
 import ImageApi from '../api/ImagesApi';
+import ProfilesApi from '../api/ProfilesApi';
+
 import {
   RegistrationPhoto,
   RegistrationName,
+  RegistrationBirthday,
+  RegistrationGender,
 } from '../components/Registration';
 import SocketContext from '../contexts';
 import { openImagePickerAsync } from '../utils/images';
 
-const MAX_STEP = 2;
+const MAX_STEP = 4;
 const DEFAULT_PROFILE = {
   name: null,
   avatar: null,
   birthday: null,
-  genderId: null,
+  gender: null,
 };
 
 export const RegisterScreen = ({ navigation }) => {
@@ -33,8 +38,8 @@ export const RegisterScreen = ({ navigation }) => {
     setStep((prevState) => prevState + 1);
   };
 
-  const handleChangeName = (value) => {
-    setData((prevState) => ({ ...prevState, name: value }));
+  const handleChangeData = (value, prop) => {
+    setData((prevState) => ({ ...prevState, [prop]: value }));
   };
 
   const handleChooseImage = async () => {
@@ -44,15 +49,19 @@ export const RegisterScreen = ({ navigation }) => {
     }
     setData((prevState) => ({ ...prevState, avatar: result.avatarUri }));
   };
+
   const handleRemoveImage = () => {
     setData((prevState) => ({ ...prevState, avatar: null }));
   };
-  const handleFocusText = () => {
-    setFocus(true);
-  };
 
   const handlePressRegister = async () => {
-    await ImageApi.updateImage(data.image, currentUser._id);
+    const profileUpdate = ProfilesApi.updateAccount({
+      _id: currentUser._id,
+      ...data,
+    });
+    const imageUpdate = ImageApi.updateImage(data.avatar, currentUser._id);
+    await Promise.all([profileUpdate, imageUpdate]);
+
     dispatch('user/get');
 
     setTimeout(() => {
@@ -67,7 +76,17 @@ export const RegisterScreen = ({ navigation }) => {
   const registerSteps = [
     <RegistrationName
       data={data}
-      onChangeName={handleChangeName}
+      onChange={handleChangeData}
+      next={handleNext}
+    />,
+    <RegistrationGender
+      data={data}
+      onChange={handleChangeData}
+      next={handleNext}
+    />,
+    <RegistrationBirthday
+      data={data}
+      onChange={handleChangeData}
       next={handleNext}
     />,
     <RegistrationPhoto
@@ -83,22 +102,6 @@ export const RegisterScreen = ({ navigation }) => {
       dispatch('user/get');
     }
   }, []);
-
-  React.useLayoutEffect(() => {
-    navigation.setOptions({
-      headerRight: () =>
-        focus ? (
-          <Button
-            onPress={() => {
-              Keyboard.dismiss();
-              setFocus(false);
-            }}
-            title="Done"
-            type={'clear'}
-          />
-        ) : null,
-    });
-  }, [navigation, focus]);
 
   return (
     <KeyboardAvoidingView behavior={'padding'}>

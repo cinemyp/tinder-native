@@ -7,7 +7,7 @@ import {
 } from '../../constants/colors';
 import { Button, Input } from 'react-native-elements';
 
-export const RegistrationName = ({ data, onChangeName, next }) => {
+export const RegistrationName = ({ data, onChange, next }) => {
   const [disabled, setDisabled] = React.useState(true);
 
   const handleChangeText = (text) => {
@@ -16,7 +16,7 @@ export const RegistrationName = ({ data, onChangeName, next }) => {
     } else {
       setDisabled(true);
     }
-    onChangeName(text);
+    onChange(text, 'name');
   };
 
   return (
@@ -28,6 +28,7 @@ export const RegistrationName = ({ data, onChangeName, next }) => {
         placeholder={'First Name'}
         containerStyle={styles['input']}
         maxLength={40}
+        autoCorrect={false}
       />
       <View style={styles['doneBtnContainer']}>
         <Button
