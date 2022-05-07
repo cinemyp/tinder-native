@@ -14,3 +14,10 @@ export const limitText = (text, limit) => {
   }
   return text + '...';
 };
+
+export const compareArrays = (arr1, arr2) => {
+  return (
+    arr1.length === arr2.length &&
+    arr1.every((item) => arr2.indexOf(item) !== -1)
+  );
+};

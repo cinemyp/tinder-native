@@ -14,9 +14,9 @@ import { Text, Button } from 'react-native-elements';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Ionicons from '@expo/vector-icons/Ionicons';
 
-import Layout from '../constants/Layout';
 import { openImagePickerAsync } from '../utils/images';
 import { SERVER_URL } from '../constants';
+import { compareArrays } from '../utils';
 
 const EditButton = ({ onPressEdit }) => (
   <View style={styles['editButton']}>
@@ -53,7 +53,7 @@ export default function MyProfileScreen({ navigation }) {
   };
 
   useEffect(() => {
-    if (!topArtists) {
+    if (compareArrays(topArtists, DEFAULT_TOP_ARTISTS)) {
       setLoadingArtists(true);
       setArtists(DEFAULT_TOP_ARTISTS);
       MusicApi.getTopArtists(currentUser.yandexId).then((data) => {
@@ -107,9 +107,9 @@ export default function MyProfileScreen({ navigation }) {
           <Text h4>My Top Artists</Text>
           <View style={styles['topArtists']}>
             {topArtists &&
-              topArtists.map((artist) => (
+              topArtists.map((artist, index) => (
                 <ArtistProfile
-                  key={artist.id}
+                  key={artist.id || index}
                   uri={artist.uri}
                   name={artist.name}
                   load={loadingArtists}
