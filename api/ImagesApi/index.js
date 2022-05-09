@@ -1,6 +1,5 @@
 import axios from 'axios';
 import { Alert } from 'react-native';
-import { firestore, firebase } from '../../firebase';
 import BaseApi from '../BaseApi';
 
 const createFormData = (photo, userId, body) => {

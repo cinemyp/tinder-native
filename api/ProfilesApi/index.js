@@ -1,6 +1,5 @@
 import axios from 'axios';
 import { Alert } from 'react-native';
-import { auth, firestore } from '../../firebase';
 import { getUserAge } from '../../utils/date';
 import BaseApi from '../BaseApi';
 import LikeApi from '../LikeApi';

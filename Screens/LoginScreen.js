@@ -18,7 +18,7 @@ export const LoginScreen = ({ navigation }) => {
       WebBrowser.openAuthSessionAsync,
       dispatch
     );
-    const makeReg = true;
+    const makeReg = false;
     if (result === !makeReg) {
       dispatch('user/get');
       setLogged(true);

@@ -32,7 +32,7 @@ class AuthApi extends BaseApi {
     }
   }
 
-  async updateProfile(user, dispatch) {}
+  async accessLibrary() {}
 
   async getMe() {
     const res = await this.get('/auth/me')

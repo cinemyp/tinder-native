@@ -17,6 +17,7 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import { openImagePickerAsync } from '../utils/images';
 import { SERVER_URL } from '../constants';
 import { compareArrays } from '../utils';
+import { TopArtists } from '../components/MusicStats';
 
 const EditButton = ({ onPressEdit }) => (
   <View style={styles['editButton']}>
@@ -32,10 +33,9 @@ const DEFAULT_TOP_ARTISTS = [{}, {}, {}];
 
 export default function MyProfileScreen({ navigation }) {
   const { currentUser, dispatch } = useStoreon('currentUser');
-  const { _id, name, age, birthdayDate, avatar, thumbnailId } = currentUser;
+  const { _id, name, age } = currentUser;
+
   const [loading, setLoading] = useState(false);
-  const [loadingArtists, setLoadingArtists] = useState(false);
-  const [topArtists, setArtists] = useState(DEFAULT_TOP_ARTISTS);
 
   const handlePressLogout = () => {
     AuthApi.signOut(dispatch);
@@ -53,15 +53,6 @@ export default function MyProfileScreen({ navigation }) {
   };
 
   useEffect(() => {
-    if (compareArrays(topArtists, DEFAULT_TOP_ARTISTS)) {
-      setLoadingArtists(true);
-      setArtists(DEFAULT_TOP_ARTISTS);
-      MusicApi.getTopArtists(currentUser.yandexId).then((data) => {
-        setArtists(data);
-        setLoadingArtists(false);
-      });
-    }
-
     if (currentUser.name) return;
     setLoading(true);
 
@@ -87,36 +78,7 @@ export default function MyProfileScreen({ navigation }) {
         {name}, {age}
       </Text>
       <View style={styles['musicStat']}>
-        {/*  <Button
-          icon={<Ionicons name={'settings'} size={42} color={'#4E4E4E'} />}
-          iconPosition={'top'}
-          title={'settings'.toUpperCase()}
-          titleStyle={{ color: '#5e5e5e', fontSize: 12 }}
-          type={'clear'}
-          onPress={onPressSettings}
-        />
-        <Button
-          icon={<Ionicons name={'pencil-sharp'} size={42} color={'#4E4E4E'} />}
-          iconPosition={'top'}
-          title={'edit'.toUpperCase()}
-          titleStyle={{ color: '#5e5e5e', fontSize: 12 }}
-          type={'clear'}
-          onPress={onPressEdit}
-        />*/}
-        <View style={styles['topArtistsWrapper']}>
-          <Text h4>My Top Artists</Text>
-          <View style={styles['topArtists']}>
-            {topArtists &&
-              topArtists.map((artist, index) => (
-                <ArtistProfile
-                  key={artist.id || index}
-                  uri={artist.uri}
-                  name={artist.name}
-                  load={loadingArtists}
-                />
-              ))}
-          </View>
-        </View>
+        <TopArtists uid={currentUser.yandexId} title={'My Top Artists'} />
       </View>
       <Button
         title={'Log out'}
@@ -166,10 +128,5 @@ const styles = StyleSheet.create({
     marginTop: 15,
     paddingHorizontal: 20,
     width: '100%',
-  },
-  topArtistsWrapper: {},
-  topArtists: {
-    marginTop: 15,
-    flexDirection: 'row',
   },
 });
