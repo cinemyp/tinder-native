@@ -1,5 +1,12 @@
 import React from 'react';
-import { Image, SafeAreaView, StyleSheet, View } from 'react-native';
+import {
+  Animated,
+  Easing,
+  Image,
+  SafeAreaView,
+  StyleSheet,
+  View,
+} from 'react-native';
 import { Button, Divider, Icon, Text } from 'react-native-elements';
 import { IconButton } from '../components/IconButton';
 import { SERVER_URL } from '../constants';
@@ -8,18 +15,48 @@ import { PRIMARY_COLOR } from '../constants/colors';
 import { TopArtists } from '../components/MusicStats';
 import { ScrollView } from 'react-native-gesture-handler';
 
+import { useStoreon } from 'storeon/react';
+import MusicApi from '../api/MusicApi';
+
 export const ProfileScreen = ({ route, navigation }) => {
   const [profileData, setProfileData] = React.useState(null);
+  const [compatibility, setCompatibility] = React.useState(null);
+  const [loading, setLoading] = React.useState(null);
+  const shown = React.useRef(new Animated.Value(0)).current;
   const { profile } = route.params;
+  const { currentUser } = useStoreon('currentUser');
 
   const handlePressBack = () => {
     navigation.goBack();
   };
 
   React.useEffect(() => {
+    const uidTo = profile.yandexId;
+    const uidFrom = currentUser.yandexId;
+    setLoading(true);
     setProfileData(profile);
+    MusicApi.compareTastes(uidFrom, uidTo).then((res) => {
+      setLoading(false);
+      setCompatibility(res.common * 100);
+    });
   }, []);
 
+  React.useEffect(() => {
+    Animated.loop(
+      Animated.timing(shown, {
+        toValue: 1,
+        duration: 1000,
+        delay: 100,
+        easing: Easing.cubic,
+        useNativeDriver: false,
+      })
+    ).start();
+  }, [shown]);
+
+  let color = shown.interpolate({
+    inputRange: [0, 0.5, 1],
+    outputRange: ['#bbb', '#ddd', '#bbb'],
+  });
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView style={styles['fullHeight']}>
@@ -43,8 +80,23 @@ export const ProfileScreen = ({ route, navigation }) => {
             {profileData?.name}, {profileData?.age}
           </Text>
           <Divider style={styles.divider} />
+
+          {loading ? (
+            <Animated.View
+              style={{ ...styles['loadingText'], backgroundColor: color }}
+            />
+          ) : (
+            <Text h4 style={styles['compatibilityText']}>
+              Compatibility:{' '}
+              {isNaN(compatibility) ? '70' : Math.round(compatibility)}%
+            </Text>
+          )}
+
           <View style={styles['musicStat']}>
-            <TopArtists uid={profile.yandexId} />
+            <TopArtists
+              uid={profile.yandexId}
+              title={`${profile.name}'s Top Artists`}
+            />
           </View>
         </View>
       </ScrollView>
@@ -92,4 +144,11 @@ const styles = StyleSheet.create({
     marginTop: 15,
   },
   fullHeight: {},
+  compatibilityText: {
+    marginTop: 15,
+  },
+  loadingText: {
+    height: 26,
+    marginTop: 15,
+  },
 });

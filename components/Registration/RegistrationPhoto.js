@@ -26,6 +26,7 @@ const RemovePhotoBtn = ({ onRemoveImage }) => {
       iconColor={SECOND_COLOR}
       onPress={onRemoveImage}
       background
+      fix
     />
   );
 };

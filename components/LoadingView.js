@@ -1,11 +1,11 @@
 import React from 'react';
 import { ActivityIndicator, StyleSheet, View } from 'react-native';
 
-const LoadingView = ({ show = false }) => {
+const LoadingView = ({ show = false, size = 'large', style = {} }) => {
   return (
     show && (
-      <View style={styles.container}>
-        <ActivityIndicator size={'large'} color={'#999999'} />
+      <View style={[styles.container, { ...style }]}>
+        <ActivityIndicator size={size} color={'#999999'} />
       </View>
     )
   );

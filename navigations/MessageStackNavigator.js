@@ -5,12 +5,16 @@ import HomeTabs from './HomeTabs';
 import { ProfileScreen } from '../screens/ProfileScreen';
 import DialogScreen from '../screens/DialogScreen';
 import { RegisterScreen } from '../screens/RegisterScreen';
+import MusicApi from '../api/MusicApi';
 
 const Stack = createStackNavigator();
 
 const MessageStackNavigator = () => {
   const BACK_TITLE = 'Messages';
-
+  const { currentUser } = useStoreon('currentUser');
+  React.useEffect(() => {
+    MusicApi.init(currentUser.yandexId).then(() => {});
+  }, []);
   return (
     <Stack.Navigator>
       <Stack.Screen

@@ -11,6 +11,7 @@ export const IconButton = ({
   iconColor,
   onPress,
   background,
+  fix,
 }) => {
   const divide = iconSize / 2.2;
   const styles = StyleSheet.create({
@@ -23,8 +24,8 @@ export const IconButton = ({
       backgroundColor: 'white',
       width: divide,
       height: divide,
-      bottom: divide,
-      right: divide,
+      bottom: fix ? 0 : divide,
+      right: fix ? 0 : divide,
       position: 'absolute',
       zIndex: -5,
     },
